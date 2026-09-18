@@ -1,10 +1,13 @@
 package com.example.tp1.data
 
+import android.R
+
 data class Entrainement(
     val titre: String,
     val activite: String,
     val lieu: String,
     val exterieur: Boolean,
     val intensite: Int,
-    val notes: String
+    val notes: String,
+    val fav: Boolean = false
 )
