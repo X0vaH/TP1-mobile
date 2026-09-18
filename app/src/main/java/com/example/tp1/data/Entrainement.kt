@@ -6,5 +6,6 @@ data class Entrainement(
     val lieu: String,
     val exterieur: Boolean,
     val intensite: Int,
-    val notes: String
+    val notes: String,
+    val fav : Boolean = false
 )
