@@ -1,7 +1,5 @@
 package com.example.tp1.data
 
-import android.R
-
 data class Entrainement(
     val titre: String,
     val activite: String,
