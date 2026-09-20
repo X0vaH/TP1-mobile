@@ -10,8 +10,8 @@ data class CreateEntrainementsUiState (
     val erreurTitre: String? = null,
     val erreurActivite: String? = null,
     val erreurLieu: String? = null,
-    val erreurExterieur: Boolean? = null,
-    val erreurIntensite: Int? = null,
+    val erreurExterieur: String? = null,
+    val erreurIntensite: String? = null,
     val erreurNotes: String? = null,
     val isSaving: Boolean = false,
     val erreur: String? = null

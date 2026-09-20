@@ -1,14 +1,18 @@
 package com.example.tp1.viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.tp1.data.Entrainement
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class CreateEntrainementsViewModel(
     private val repository: IEntrainementRepository = FakeEntrainementRepository()
-) {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateEntrainementsUiState())
 
@@ -22,6 +26,7 @@ class CreateEntrainementsViewModel(
             )
         }
     }
+
     fun modifierActivite(activite:String) {
         _uiState.update {
             it.copy(
@@ -68,6 +73,57 @@ class CreateEntrainementsViewModel(
     }
 
     fun creerEntrainement(onSuccess: ()-> Unit) {
-        // TODO
+        val state = _uiState.value
+
+        var formulaireValide = true
+
+        if (state.titre.length < 3) {
+            _uiState.update {
+                it.copy(erreurTitre = "Le titre doit contenire au moins 3 caractères")
+            }
+            formulaireValide = false
+        }
+
+        if (state.lieu.isBlank()) {
+            _uiState.update {
+                it.copy(erreurLieu = "Le lieu est obligatoire")
+            }
+            formulaireValide = false
+        }
+
+        if (state.intensite !in 1..10) {
+            _uiState.update {
+                it.copy(erreurIntensite = "L'intensité est obligatoire")
+            }
+        }
+
+        if (!formulaireValide) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSaving = true, erreur = null) }
+
+            try {
+                repository.ajouterEntrainement(
+                    Entrainement(
+                        titre = state.titre,
+                        activite = state.activite,
+                        lieu = state.lieu,
+                        exterieur = state.exterieur,
+                        intensite = state.intensite,
+                        notes = state.notes
+                    )
+                )
+
+                onSuccess()
+
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isSaving = false,
+                        erreur = e.message
+                    )
+                }
+            }
+        }
     }
 }
