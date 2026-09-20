@@ -20,10 +20,18 @@ class FakeEntrainementRepository : IEntrainementRepository {
         delay(2000.milliseconds)
         emit(FakeListEntrainement.liste)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun ajouterEntrainement(entrainement: Entrainement) {
+        withContext(Dispatchers.IO) {
+            delay(500.milliseconds)
+
+            FakeListEntrainement.liste.add(entrainement)
+        }
+    }
 }
 
 object FakeListEntrainement {
-    val liste = listOf(
+    val liste = mutableListOf(
         Entrainement("Course a l'exterieur", "Course", "Piste de course",
             true, 8, "Apporter équipements pour la course"),
         Entrainement("Vélo a l'exterieur", "Vélo", "Piste cyclabe",
