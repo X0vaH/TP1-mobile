@@ -1,6 +1,6 @@
 package com.example.tp1.ui.theme.screens
 
-<<<<<<< HEAD
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,44 +12,24 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-=======
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
->>>>>>> origin/1-feature---ui--training-creation-form
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tp1.ui.theme.TrainingApp
-import com.example.tp1.viewmodel.CreateEntrainementsUiState
 import com.example.tp1.viewmodel.CreateEntrainementsViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
-=======
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tp1.viewmodel.CreateEntrainementsViewModel
-
->>>>>>> origin/1-feature---ui--training-creation-form
 @Composable
 fun CreateEntrainementScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-<<<<<<< HEAD
     onEntrainementCreated: () -> Unit,
-=======
-    onFilmCreated: () -> Unit,
->>>>>>> origin/1-feature---ui--training-creation-form
     viewModel: CreateEntrainementsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,11 +56,7 @@ fun CreateEntrainementScreen(
             onAnneeChange = viewModel::modifierAnnee,
             onNoteChange = viewModel::modifierNote,
             onSaveClick = {
-<<<<<<< HEAD
                 viewModel.creerEntrainement(onEntrainementCreated)
-=======
-                viewModel.creerFilm(onFilmCreated)
->>>>>>> origin/1-feature---ui--training-creation-form
             }
         )
     }
@@ -88,11 +64,7 @@ fun CreateEntrainementScreen(
 
 @Composable
 private fun CreateFilmContent(
-<<<<<<< HEAD
     uiState: CreateEntrainementsUiState,
-=======
-    uiState: CreateFilmUiState,
->>>>>>> origin/1-feature---ui--training-creation-form
     modifier: Modifier = Modifier,
     onTitreChange: (String) -> Unit,
     onAnneeChange: (String) -> Unit,
@@ -159,7 +131,6 @@ private fun CreateFilmContent(
             )
         }
     }
-<<<<<<< HEAD
 }
 @Preview
 @Composable
@@ -167,6 +138,4 @@ fun CreateEntrainementScreenPreview() {
     TrainingApp {
         CreateEntrainementScreen()
     }
-=======
->>>>>>> origin/1-feature---ui--training-creation-form
 }
