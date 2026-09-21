@@ -25,7 +25,6 @@ import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.TrainingApp
 =======
 import com.example.tp1.ui.theme.DemoFilmsTheme
->>>>>>> 355044f (Undo package mouvement for later):app/src/main/java/com/example/tp1/ui/theme/screens/EntrainementsScreen.kt
 import com.example.tp1.ui.theme.components.EntrainementCard
 import com.example.tp1.viewmodel.EntrainementsUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
