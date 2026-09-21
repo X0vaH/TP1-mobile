@@ -7,16 +7,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tp1.data.Entrainement
-import com.example.tp1.ui.theme.DemoFilmsTheme
 import androidx.compose.ui.res.stringResource
+import com.example.tp1.R
 import com.example.tp1.data.TypeActivite
+import com.example.tp1.ui.theme.TrainingApp
 
 @Composable
 fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
@@ -25,7 +26,7 @@ fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 15.dp),
         shape = CutCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Row(
@@ -34,14 +35,18 @@ fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
         {
             Column {
                 Text(entrainement.titre)
-                Text("Activité : " + stringResource(entrainement.activite.labelRes))
-                Text("Lieu : " + entrainement.lieu)
-                Text("A l'extérieur : " + entrainement.exterieur.toString())
-                Text("Intensité : " + entrainement.intensite + "/10")
-                Text("Notes : " + entrainement.notes)
+                Text(stringResource(R.string.card_activite, stringResource(entrainement.activite.labelRes)))
+                Text(stringResource(R.string.card_lieu, entrainement.lieu))
+                Text(
+                    stringResource(
+                        R.string.card_exterieur,
+                        stringResource(if (entrainement.exterieur) R.string.oui else R.string.non)
+                    )
+                )
+                Text(stringResource(R.string.card_intensite, entrainement.intensite))
+                Text(stringResource(R.string.card_notes, entrainement.notes))
 
-                BtnDetails(
-                    onClick = onDetailsClick )
+                BtnDetails(onClick = onDetailsClick)
             }
 
         }
@@ -52,7 +57,7 @@ fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
 @Preview
 @Composable
 fun EntrainementCardPreview() {
-    DemoFilmsTheme {
+    TrainingApp {
         EntrainementCard(
             Entrainement(
                 id = 1, titre = "Course à l'extérieur", activite = TypeActivite.COURSE,

@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.tp1.ui.theme.DemoFilmsTheme
+import com.example.tp1.ui.theme.TrainingApp
 
 @Composable
 fun DetailChamp(label: String, valeur: String, modifier: Modifier = Modifier) {
@@ -26,7 +26,7 @@ fun DetailChamp(label: String, valeur: String, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun DetailChampPreview() {
-    DemoFilmsTheme {
+    TrainingApp {
         DetailChamp(label = "Lieu", valeur = "Gym (Intérieur)")
     }
 }

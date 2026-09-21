@@ -35,7 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
 import com.example.tp1.repository.FakeListEntrainement
-import com.example.tp1.ui.theme.DemoFilmsTheme
+import com.example.tp1.ui.theme.TrainingApp
+import com.example.tp1.ui.theme.components.ConfirmationSuppressionDialog
 import com.example.tp1.ui.theme.components.DetailChamp
 import com.example.tp1.viewmodel.EntrainementDetailUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
@@ -54,7 +55,12 @@ fun EntrainementDetailScreen(
         uiState = uiState,
         onBack = onBack,
         onCompleteChange = { viewModel.basculerComplete(id) },
-        onSupprimerClick = viewModel::afficherDialogueSuppression
+        onSupprimerClick = viewModel::afficherDialogueSuppression,
+        onAnnulerSuppression = viewModel::masquerDialogueSuppression,
+        onConfirmerSuppression = {
+            viewModel.confirmerSuppression()
+            onBack()
+        }
     )
 }
 
@@ -64,7 +70,9 @@ fun EntrainementDetailContent(
     uiState: EntrainementDetailUiState,
     onBack: () -> Unit,
     onCompleteChange: () -> Unit,
-    onSupprimerClick: () -> Unit
+    onSupprimerClick: () -> Unit,
+    onAnnulerSuppression: () -> Unit,
+    onConfirmerSuppression: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -97,6 +105,16 @@ fun EntrainementDetailContent(
                 Text(stringResource(R.string.entrainement_introuvable))
             }
             else -> DetailCorps(uiState.entrainement, padding, onCompleteChange)
+        }
+    }
+
+    if (uiState.afficherDialogueSuppression) {
+        uiState.entrainement?.let { entrainement ->
+            ConfirmationSuppressionDialog(
+                titreEntrainement = entrainement.titre,
+                onAnnuler = onAnnulerSuppression,
+                onConfirmer = onConfirmerSuppression
+            )
         }
     }
 }
@@ -165,7 +183,7 @@ private fun DetailCorps(
 @Preview(name = "Sombre", uiMode = AndroidUiModes.UI_MODE_NIGHT_YES)
 @Composable
 fun EntrainementDetailPreview() {
-    DemoFilmsTheme {
+    TrainingApp {
         EntrainementDetailContent(
             uiState = EntrainementDetailUiState(
                 entrainement = FakeListEntrainement.liste.first(),
@@ -173,7 +191,28 @@ fun EntrainementDetailPreview() {
             ),
             onBack = {},
             onCompleteChange = {},
-            onSupprimerClick = {}
+            onSupprimerClick = {},
+            onAnnulerSuppression = {},
+            onConfirmerSuppression = {}
+        )
+    }
+}
+
+@Preview(name = "Dialogue suppression")
+@Composable
+fun EntrainementDetailDialoguePreview() {
+    TrainingApp {
+        EntrainementDetailContent(
+            uiState = EntrainementDetailUiState(
+                entrainement = FakeListEntrainement.liste.first(),
+                isLoading = false,
+                afficherDialogueSuppression = true
+            ),
+            onBack = {},
+            onCompleteChange = {},
+            onSupprimerClick = {},
+            onAnnulerSuppression = {},
+            onConfirmerSuppression = {}
         )
     }
 }
@@ -181,12 +220,14 @@ fun EntrainementDetailPreview() {
 @Preview(name = "Introuvable")
 @Composable
 fun EntrainementDetailIntrouvablePreview() {
-    DemoFilmsTheme {
+    TrainingApp {
         EntrainementDetailContent(
             uiState = EntrainementDetailUiState(entrainement = null, isLoading = false),
             onBack = {},
             onCompleteChange = {},
-            onSupprimerClick = {}
+            onSupprimerClick = {},
+            onAnnulerSuppression = {},
+            onConfirmerSuppression = {}
         )
     }
 }
