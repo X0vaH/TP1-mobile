@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tp1.data.Entrainement
 import com.example.tp1.ui.theme.DemoFilmsTheme
+import androidx.compose.ui.res.stringResource
+import com.example.tp1.data.TypeActivite
 
 @Composable
 fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
@@ -32,7 +34,7 @@ fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
         {
             Column {
                 Text(entrainement.titre)
-                Text("Activité : " + entrainement.activite)
+                Text("Activité : " + stringResource(entrainement.activite.labelRes))
                 Text("Lieu : " + entrainement.lieu)
                 Text("A l'extérieur : " + entrainement.exterieur.toString())
                 Text("Intensité : " + entrainement.intensite + "/10")
@@ -51,11 +53,14 @@ fun EntrainementCard(entrainement: Entrainement, onDetailsClick: () -> Unit) {
 @Composable
 fun EntrainementCardPreview() {
     DemoFilmsTheme {
-        EntrainementCard(Entrainement("Course a l'exterieur", "Course", "Piste de course",
-            true, 8, "Apporter équipements pour la course"),
-            onDetailsClick = {
-                println("Details")
-            })
+        EntrainementCard(
+            Entrainement(
+                id = 1, titre = "Course à l'extérieur", activite = TypeActivite.COURSE,
+                lieu = "Piste de course", exterieur = true, intensite = 8,
+                notes = "Apporter équipements pour la course"
+            ),
+            onDetailsClick = { println("Details") }
+        )
     }
 
 }

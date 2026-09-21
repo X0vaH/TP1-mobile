@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">TP1</string>
     <string name="txt_details">Détails</string>
+    <string name="retour">Retour</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="label_activite">Activité</string>
+    <string name="label_lieu">Lieu</string>
+    <string name="lieu_exterieur">Extérieur</string>
+    <string name="lieu_interieur">Intérieur</string>
+    <string name="lieu_avec_type">%1$s (%2$s)</string>
+    <string name="label_intensite">Intensité</string>
+    <string name="intensite_valeur">%1$d/10</string>
+    <string name="label_notes">Notes / Consignes</string>
+    <string name="seance_completee">Séance complétée</string>
+    <string name="entrainement_introuvable">Entraînement introuvable</string>
+
+    <string name="activite_musculation">Musculation</string>
+    <string name="activite_course">Course</string>
+    <string name="activite_velo">Velo</string>
+    <string name="activite_natation">Natation</string>
+    <string name="activite_yoga">Yoga</string>
+    <string name="activite_autre">Autre</string>
 </resources>

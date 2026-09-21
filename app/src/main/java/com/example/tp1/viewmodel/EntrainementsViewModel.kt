@@ -9,45 +9,90 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class EntrainementsViewModel(
     private val repository: IEntrainementRepository = FakeEntrainementRepository()
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(EntrainementsUiState())
-
+    private val _idSelectionne = MutableStateFlow<Int?>(null)
+    private val _afficherDialogueSuppression = MutableStateFlow(false)
     val uiState: StateFlow<EntrainementsUiState> = _uiState.asStateFlow()
+
 
     init {
         chargerEntrainements()
     }
 
-    fun selectionneEntrainement(entrainement: Entrainement) {
 
-        _uiState.update {
-            it.copy(
-                entrainementSelectionne = entrainement
-            )
-        }
+    val detailUiState: StateFlow<EntrainementDetailUiState> = combine(
+        _uiState, _idSelectionne, _afficherDialogueSuppression
+    ) { etat, id, dialogue ->
+        EntrainementDetailUiState(
+            entrainement = etat.entrainements.find { it.id == id },
+            isLoading = etat.isLoading,
+            afficherDialogueSuppression = dialogue
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = EntrainementDetailUiState()
+    )
+
+    fun selectionneEntrainement(entrainement: Entrainement) {
+        _uiState.update { it.copy(entrainementSelectionne = entrainement) }
+    }
+
+    fun ajouterEntrainement(entrainement: Entrainement) {
+        viewModelScope.launch { repository.ajouter(entrainement) }
+    }
+
+    fun basculerComplete(id: Int) {
+        viewModelScope.launch { repository.basculerComplete(id) }
+    }
+
+    fun basculerFavori(id: Int) {
+        viewModelScope.launch { repository.basculerFavori(id) }
+    }
+
+    fun supprimerEntrainement(id: Int) {
+        viewModelScope.launch { repository.supprimer(id) }
+    }
+
+    fun chargerDetail(id: Int) {
+        _idSelectionne.value = id
+    }
+
+    fun afficherDialogueSuppression() {
+        _afficherDialogueSuppression.value = true
+    }
+
+    fun masquerDialogueSuppression() {
+        _afficherDialogueSuppression.value = false
+    }
+
+    fun confirmerSuppression() {
+        val id = _idSelectionne.value ?: return
+        _afficherDialogueSuppression.value = false
+        supprimerEntrainement(id)
     }
 
     private fun chargerEntrainements() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
+            _uiState.update { it.copy(isLoading = true) }
             try {
-                val entrainements = repository.chargerEntrainements()
-                _uiState.update {
-                    it.copy(isLoading = false, entrainements = entrainements)
-                }
+                val liste = repository.chargerEntrainements()
+                _uiState.update { it.copy(isLoading = false, entrainements = liste) }
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(errorMessage = e.toString(), isLoading = false)
-                }
+                _uiState.update { it.copy(errorMessage = e.toString(), isLoading = false) }
+                return@launch
+            }
+            repository.observerEntrainements().collect { liste ->
+                _uiState.update { it.copy(entrainements = liste) }
             }
         }
     }
-
-
 }
