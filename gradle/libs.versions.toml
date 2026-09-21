@@ -10,6 +10,7 @@ kotlin = "2.4.20"
 composeBom = "2026.09.00"
 navigationCompose = "2.10.1"
 lifecycleViewmodelCompose = "2.11.0"
+navigationCompose = "2.8.8"
 kotlinxSerialization = "1.7.3"
 
 [libraries]

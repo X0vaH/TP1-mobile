@@ -20,6 +20,7 @@ class FakeEntrainementRepository : IEntrainementRepository {
         entrainements.value
     }
 
+<<<<<<< HEAD
     override fun observerEntrainements(): Flow<List<Entrainement>> = entrainements.asStateFlow()
 
     override suspend fun ajouter(entrainement: Entrainement) = withContext(Dispatchers.IO) {
@@ -64,5 +65,30 @@ object FakeListEntrainement {
             lieu = "Gym", exterieur = false, intensite = 9,
             notes = "Étirez-vous avant"
         ),
+=======
+    override fun observerEntrainements(): Flow<List<Entrainement>> = flow {
+        emit(FakeListEntrainement.liste)
+        delay(2000.milliseconds)
+        emit(FakeListEntrainement.liste)
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun ajouterEntrainement(entrainement: Entrainement) {
+        withContext(Dispatchers.IO) {
+            delay(500.milliseconds)
+
+            FakeListEntrainement.liste.add(entrainement)
+        }
+    }
+}
+
+object FakeListEntrainement {
+    val liste = mutableListOf(
+        Entrainement("Course a l'exterieur", "Course", "Piste de course",
+            true, 8, "Apporter équipements pour la course"),
+        Entrainement("Vélo a l'exterieur", "Vélo", "Piste cyclabe",
+            true, 7, "Apporter un casque"),
+        Entrainement("Muscu", "Musculation", "Gym",
+            false, 9, "Étirer vous avant"),
+>>>>>>> origin/1-feature---ui--training-creation-form
     )
 }
