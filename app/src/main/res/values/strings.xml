@@ -1,4 +1,35 @@
-<resources>
-    <string name="app_name">TP1</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="Typos">TP1</string>
     <string name="txt_details">Détails</string>
+    <string name="retour">Retour</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="label_activite">Activité</string>
+    <string name="label_lieu">Lieu</string>
+    <string name="lieu_exterieur">Extérieur</string>
+    <string name="lieu_interieur">Intérieur</string>
+    <string name="lieu_avec_type">%1$s (%2$s)</string>
+    <string name="label_intensite">Intensité</string>
+    <string name="intensite_valeur">%1$d/10</string>
+    <string name="label_notes">Notes / Consignes</string>
+    <string name="seance_completee">Séance complétée</string>
+    <string name="entrainement_introuvable">Entraînement introuvable</string>
+    <string name="annuler">Annuler</string>
+    <string name="dialogue_suppression_titre">Supprimer l\'entraînement ?</string>
+    <string name="dialogue_suppression_message">Voulez-vous vraiment supprimer « %1$s » ? Cette action est irréversible.</string>
+    <string name="oui">Oui</string>
+    <string name="non">Non</string>
+    <string name="card_activite">Activité : %1$s</string>
+    <string name="card_lieu">Lieu : %1$s</string>
+    <string name="card_exterieur">À l\'extérieur : %1$s</string>
+    <string name="card_intensite">Intensité : %1$d/10</string>
+    <string name="card_notes">Notes : %1$s</string>
+    <string name="erreur_chargement">Erreur : %1$s</string>
+
+
+    <string name="activite_musculation">Musculation</string>
+    <string name="activite_course">Course</string>
+    <string name="activite_velo">Velo</string>
+    <string name="activite_natation">Natation</string>
+    <string name="activite_yoga">Yoga</string>
+    <string name="activite_autre">Autre</string>
 </resources>

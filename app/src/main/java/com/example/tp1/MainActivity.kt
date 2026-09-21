@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.tp1.ui.theme.DemoFilmsTheme
-import com.example.tp1.ui.theme.screens.EntrainementsScreen
+import com.example.tp1.navigation.AppNavigation
+import com.example.tp1.ui.theme.TrainingApp
 
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +13,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DemoFilmsTheme {
-                EntrainementsScreen()
+            TrainingApp {
+                AppNavigation()
             }
         }
     }
