@@ -1,4 +1,4 @@
-package com.example.tp1.ui.components
+package com.example.tp1.ui.theme.components
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

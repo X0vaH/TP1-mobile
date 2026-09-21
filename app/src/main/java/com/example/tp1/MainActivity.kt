@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.tp1.ui.TP1App
 import com.example.tp1.ui.theme.DemoFilmsTheme
-import com.example.tp1.ui.screens.EntrainementsScreen
 
 
 class MainActivity : ComponentActivity() {

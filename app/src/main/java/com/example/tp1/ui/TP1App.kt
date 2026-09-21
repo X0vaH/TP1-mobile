@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tp1.ui.navigation.CreateEntrainementRoute
 import com.example.tp1.ui.navigation.EntrainementRoute
-import com.example.tp1.ui.screens.EntrainementsScreen
+import com.example.tp1.ui.theme.screens.EntrainementsScreen
 
 @Composable
 fun TP1App() {

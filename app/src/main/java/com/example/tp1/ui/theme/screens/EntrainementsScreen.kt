@@ -1,4 +1,4 @@
-package com.example.tp1.ui.screens
+package com.example.tp1.ui.theme.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tp1.data.Entrainement
 import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.DemoFilmsTheme
-import com.example.tp1.ui.components.EntrainementCard
+import com.example.tp1.ui.theme.components.EntrainementCard
 import com.example.tp1.viewmodel.EntrainementsUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
 
