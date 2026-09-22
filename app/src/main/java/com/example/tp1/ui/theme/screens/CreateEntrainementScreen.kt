@@ -171,13 +171,13 @@ fun CreateEntrainementContent(
 
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             SegmentedButton(
-                selected = !uiState.exterieur,
+                selected = uiState.exterieur,
                 onClick = { onExterieurChange(true) },
                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
             ) { Text("Extérieur") }
 
             SegmentedButton(
-                selected = uiState.exterieur,
+                selected = !uiState.exterieur,
                 onClick = { onExterieurChange(false) },
                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
             ) { Text("Intérieur") }
