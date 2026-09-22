@@ -17,7 +17,7 @@ fun TP1App() {
         startDestination = EntrainementRoute
     ) {
         composable<EntrainementRoute> {
-            EntrainementsScreen()
+            //EntrainementsScreen()
         }
         composable<CreateEntrainementRoute> {
             // TODO : Add link to create screen

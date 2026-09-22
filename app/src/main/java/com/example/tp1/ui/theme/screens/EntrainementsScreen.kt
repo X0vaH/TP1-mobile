@@ -13,27 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
 import androidx.compose.ui.res.stringResource
-=======
->>>>>>> origin/1-feature---ui--training-creation-form
 import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-<<<<<<< HEAD
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
 import com.example.tp1.repository.FakeListEntrainement
-<<<<<<< HEAD:app/src/main/java/com/example/tp1/ui/screens/EntrainementsScreen.kt
 import com.example.tp1.ui.theme.TrainingApp
-=======
-=======
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tp1.data.Entrainement
-import com.example.tp1.repository.FakeListEntrainement
->>>>>>> origin/1-feature---ui--training-creation-form
-import com.example.tp1.ui.theme.DemoFilmsTheme
 import com.example.tp1.ui.theme.components.EntrainementCard
 import com.example.tp1.viewmodel.EntrainementsUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
@@ -41,22 +29,14 @@ import com.example.tp1.viewmodel.EntrainementsViewModel
 
 @Composable
 fun EntrainementsScreen(
-<<<<<<< HEAD
     viewModel: EntrainementsViewModel,
     onDetailsClick: (Int) -> Unit
-=======
-    viewModel: EntrainementsViewModel = viewModel()
->>>>>>> origin/1-feature---ui--training-creation-form
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     EntrainementContent(
         uiState = uiState,
-<<<<<<< HEAD
         onDetailsClick = { entrainement -> onDetailsClick(entrainement.id) }
-=======
-        onDetailsClick = viewModel::selectionneEntrainement
->>>>>>> origin/1-feature---ui--training-creation-form
     )
 }
 
@@ -68,10 +48,6 @@ fun EntrainementContent(uiState: EntrainementsUiState, onDetailsClick: (Entraine
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-<<<<<<< HEAD
-=======
-                //Text("Chargement films.....")
->>>>>>> origin/1-feature---ui--training-creation-form
                 CircularProgressIndicator()
             }
         }
@@ -81,11 +57,7 @@ fun EntrainementContent(uiState: EntrainementsUiState, onDetailsClick: (Entraine
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-<<<<<<< HEAD
                 Text(stringResource(R.string.erreur_chargement, uiState.errorMessage))
-=======
-                Text("erreur ${uiState.errorMessage}}")
->>>>>>> origin/1-feature---ui--training-creation-form
             }
         }
         else -> {
@@ -113,13 +85,8 @@ fun EntrainementsListe(entrainements: List<Entrainement>, onDetailsClick: (Entra
     uiMode = AndroidUiModes.UI_MODE_NIGHT_YES
 )
 @Composable
-<<<<<<< HEAD
 fun EntrainementListePreview() {
     TrainingApp {
-=======
-fun FilmsListePreview() {
-    DemoFilmsTheme {
->>>>>>> origin/1-feature---ui--training-creation-form
         EntrainementsListe(FakeListEntrainement.liste, onDetailsClick = {
             entrainement -> println("entrainement : ${entrainement.titre}")
         })

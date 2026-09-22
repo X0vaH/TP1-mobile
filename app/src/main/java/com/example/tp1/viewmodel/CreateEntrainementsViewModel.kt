@@ -3,6 +3,7 @@ package com.example.tp1.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tp1.data.Entrainement
+import com.example.tp1.data.TypeActivite
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class CreateEntrainementsViewModel(
         }
     }
 
-    fun modifierActivite(activite:String) {
+    fun modifierActivite(activite: TypeActivite) {
         _uiState.update {
             it.copy(
                 activite = activite,
@@ -95,18 +96,25 @@ class CreateEntrainementsViewModel(
             _uiState.update {
                 it.copy(erreurIntensite = "L'intensité est obligatoire")
             }
+            formulaireValide = false
         }
-
+        if (state.activite == null) {
+            _uiState.update {
+                it.copy(erreurActivite = "Le type d'activité est obligatoire")
+            }
+            formulaireValide = false
+        }
         if (!formulaireValide) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true, erreur = null) }
 
             try {
-                repository.ajouterEntrainement(
+                repository.ajouter(
                     Entrainement(
+                        id = -1,
                         titre = state.titre,
-                        activite = state.activite,
+                        activite = state.activite!!,
                         lieu = state.lieu,
                         exterieur = state.exterieur,
                         intensite = state.intensite,

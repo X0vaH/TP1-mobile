@@ -1,8 +1,10 @@
 package com.example.tp1.viewmodel
 
+import com.example.tp1.data.TypeActivite
+
 data class CreateEntrainementsUiState (
     val titre: String = "",
-    val activite: String = "",
+    val activite: TypeActivite? = null,
     val lieu: String ="",
     val exterieur: Boolean = true,
     val intensite: Int = 0,

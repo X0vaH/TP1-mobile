@@ -8,10 +8,6 @@ data class Entrainement(
     val exterieur: Boolean,
     val intensite: Int,
     val notes: String,
-<<<<<<< HEAD
     val estComplete: Boolean =false,
     val estFavori: Boolean = false
-=======
-    val fav : Boolean = false
->>>>>>> origin/1-feature---ui--training-creation-form
 )
