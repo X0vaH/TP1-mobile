@@ -1,6 +1,7 @@
 package com.example.tp1.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,14 +9,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.tp1.ui.theme.screens.CreateEntrainementScreen
 import com.example.tp1.ui.theme.screens.EntrainementDetailScreen
 import com.example.tp1.ui.theme.screens.EntrainementsScreen
+import com.example.tp1.viewmodel.CreateEntrainementsViewModel
 import com.example.tp1.viewmodel.EntrainementsViewModel
 
 object Routes {
     const val ARG_ID = "id"
     const val LISTE = "liste"
     const val DETAIL = "detail/{$ARG_ID}"
+
+    const val CREER = "CREER"
 
     fun detail(id: Int) = "detail/$id"
 }
@@ -41,6 +46,17 @@ fun AppNavigation(
                 id = id,
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Routes.CREER
+        ) {
+            val createViewModel: CreateEntrainementsViewModel = viewModel()
+            CreateEntrainementScreen(
+                modifier = Modifier,
+                onBackClick = { navController.popBackStack()},
+                onEntrainementCreated = { navController.popBackStack()},
+                viewModel = createViewModel
             )
         }
     }

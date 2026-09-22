@@ -32,4 +32,10 @@
     <string name="activite_natation">Natation</string>
     <string name="activite_yoga">Yoga</string>
     <string name="activite_autre">Autre</string>
+    <string name="activite_form_lbl">Activité</string>
+    <string name="titre_form_lbl">Titre</string>
+    <string name="lieu_form_lbl">Lieu</string>
+    <string name="erreur_form_lbl">Erreur : %1$s</string>
+    <string name="creer_form_btn_txt">Créer</string>
+    <string name="intensite_form_lbl">Intensité : %1$d</string>
 </resources>
