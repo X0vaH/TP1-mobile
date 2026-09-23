@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tp1.R
@@ -70,7 +71,7 @@ fun EntrainementCard(
             IconButton(onClick = onFavoriClick) {
                 Icon(
                     imageVector = if (entrainement.estFavori) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (entrainement.estFavori) "Retirer des favoris" else "Ajouter aux favoris",
+                    contentDescription = if (entrainement.estFavori) stringResource(R.string.retirer_favoris) else stringResource(R.string.ajouter_favoris),
                     tint = if (entrainement.estFavori) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -78,7 +79,8 @@ fun EntrainementCard(
     }
 }
 
-@Preview
+@Preview(name = "Clair")
+@Preview(name = "Sombre", uiMode = AndroidUiModes.UI_MODE_NIGHT_YES)
 @Composable
 fun EntrainementCardPreview() {
     TrainingApp {

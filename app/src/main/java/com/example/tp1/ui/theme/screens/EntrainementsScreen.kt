@@ -62,7 +62,7 @@ fun EntrainementsScreen(
             FloatingActionButton(onClick = onCreateClick) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Créer un entraînement"
+                    contentDescription = stringResource(R.string.creer_entrainement_cd)
                 )
             }
         }
@@ -115,20 +115,22 @@ fun EntrainementContent(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Search field
                 OutlinedTextField(
                     value = uiState.rechercheQuery,
                     onValueChange = onRechercheChange,
-                    label = { Text("Rechercher par titre") },
+                    label = { Text(stringResource(R.string.rechercher_titre)) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Recherche"
+                            contentDescription = stringResource(R.string.recherche_cd)
                         )
                     },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                // Filter chips (Favoris + Types d'activité)
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -136,7 +138,7 @@ fun EntrainementContent(
                         FilterChip(
                             selected = uiState.filtreFavoris,
                             onClick = { onFiltreFavorisChange(!uiState.filtreFavoris) },
-                            label = { Text("Favoris") },
+                            label = { Text(stringResource(R.string.filtre_favoris)) },
                             leadingIcon = if (uiState.filtreFavoris) {
                                 {
                                     Icon(
@@ -153,7 +155,7 @@ fun EntrainementContent(
                         FilterChip(
                             selected = uiState.typeActiviteSelectionne == null,
                             onClick = { onTypeActiviteChange(null) },
-                            label = { Text("Tous") }
+                            label = { Text(stringResource(R.string.filtre_tous)) }
                         )
                     }
 
@@ -189,7 +191,7 @@ fun EntrainementsListe(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("Aucun entraînement trouvé")
+            Text(stringResource(R.string.aucun_entrainement_trouve))
         }
     } else {
         LazyColumn(
@@ -207,9 +209,8 @@ fun EntrainementsListe(
     }
 }
 
-@Preview(
-    uiMode = AndroidUiModes.UI_MODE_NIGHT_YES
-)
+@Preview(name = "Clair")
+@Preview(name = "Sombre", uiMode = AndroidUiModes.UI_MODE_NIGHT_YES)
 @Composable
 fun EntrainementListePreview() {
     TrainingApp {
