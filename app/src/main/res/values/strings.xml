@@ -38,4 +38,12 @@
     <string name="erreur_form_lbl">Erreur : %1$s</string>
     <string name="creer_form_btn_txt">Créer</string>
     <string name="intensite_form_lbl">Intensité : %1$d</string>
+    <string name="rechercher_titre">Rechercher par titre</string>
+    <string name="filtre_favoris">Favoris</string>
+    <string name="filtre_tous">Tous</string>
+    <string name="aucun_entrainement_trouve">Aucun entraînement trouvé</string>
+    <string name="creer_entrainement_cd">Créer un entraînement</string>
+    <string name="recherche_cd">Recherche</string>
+    <string name="retirer_favoris">Retirer des favoris</string>
+    <string name="ajouter_favoris">Ajouter aux favoris</string>
 </resources>

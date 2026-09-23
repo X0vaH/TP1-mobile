@@ -34,7 +34,8 @@ fun AppNavigation(
         composable(Routes.LISTE) {
             EntrainementsScreen(
                 viewModel = viewModel,
-                onDetailsClick = { id -> navController.navigate(Routes.detail(id)) }
+                onDetailsClick = { id -> navController.navigate(Routes.detail(id)) },
+                onCreateClick = { navController.navigate(Routes.CREER) }
             )
         }
         composable(
