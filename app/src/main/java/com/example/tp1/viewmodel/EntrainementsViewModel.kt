@@ -3,6 +3,7 @@ package com.example.tp1.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tp1.data.Entrainement
+import com.example.tp1.data.TypeActivite
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,18 @@ class EntrainementsViewModel(
 
     fun selectionneEntrainement(entrainement: Entrainement) {
         _uiState.update { it.copy(entrainementSelectionne = entrainement) }
+    }
+
+    fun onRechercheChange(query: String) {
+        _uiState.update { it.copy(rechercheQuery = query) }
+    }
+
+    fun onFiltreFavorisChange(favoris: Boolean) {
+        _uiState.update { it.copy(filtreFavoris = favoris) }
+    }
+
+    fun onTypeActiviteChange(type: TypeActivite?) {
+        _uiState.update { it.copy(typeActiviteSelectionne = type) }
     }
 
     fun ajouterEntrainement(entrainement: Entrainement) {

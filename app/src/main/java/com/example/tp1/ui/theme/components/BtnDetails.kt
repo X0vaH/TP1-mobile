@@ -7,6 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tp1.R
 import com.example.tp1.ui.theme.TrainingApp
+import com.example.tp1.ui.theme.TrainingApp
 
 @Composable
 fun BtnDetails(
