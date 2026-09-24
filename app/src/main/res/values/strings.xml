@@ -51,6 +51,10 @@
     <string name="activite_natation">Natation</string>
     <string name="activite_yoga">Yoga</string>
     <string name="activite_autre">Autre</string>
+    <string name="erreur_location">Le lieu est obligatoire</string>
+    <string name="error_intensity">L\'intensité est obligatoire</string>
+    <string name="error_title">Le titre doit contenire au moins 3 caractères</string>
+    <string name="error_activity_type">Le type d\'activité est obligatoire</string>
 
 
 </resources>

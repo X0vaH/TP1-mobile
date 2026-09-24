@@ -1,6 +1,5 @@
 package com.example.tp1.ui.theme.screens
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -58,12 +57,12 @@ fun CreateEntrainementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Nouveau entrainement") },
+                title = { Text(stringResource(R.string.creer_entrainement_cd)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Retour"
+                            contentDescription = stringResource(R.string.retour)
                         )
                     }
                 }
@@ -99,120 +98,132 @@ fun CreateEntrainementContent(
     onIntensiteChange: (Int) -> Unit,
     onNotesChange: (String) -> Unit
 ) {
+    val isFormValid = uiState.titre.isNotBlank() &&
+            uiState.activite != null &&
+            uiState.lieu.isNotBlank() &&
+            uiState.erreurTitre == null &&
+            uiState.erreurActivite == null &&
+            uiState.erreurLieu == null &&
+            uiState.erreurNotes == null
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Titre
         OutlinedTextField(
             value = uiState.titre,
             onValueChange = onTitreChange,
             label = { Text(stringResource(R.string.titre_form_lbl)) },
             isError = uiState.erreurTitre != null,
             supportingText = {
-                uiState.erreurTitre?.let {
-                    Text(it)
-                }
+                uiState.erreurTitre?.let { Text(stringResource(R.string.error_title)) }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Activité Dropdown
         var dropDownExpanded by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             expanded = dropDownExpanded,
-            onExpandedChange = {dropDownExpanded = !dropDownExpanded}
+            onExpandedChange = { dropDownExpanded = !dropDownExpanded }
         ) {
             OutlinedTextField(
-                value = uiState.activite.toString(),
+                value = uiState.activite?.let { stringResource(it.labelRes) } ?: "",
                 onValueChange = {},
                 readOnly = true,
-                label = {Text(stringResource(R.string.activite_form_lbl))},
+                label = { Text(stringResource(R.string.activite_form_lbl)) },
                 isError = uiState.erreurActivite != null,
                 supportingText = {
-                    uiState.erreurActivite?.let {
-                        Text(it)
-                    }
+                    uiState.erreurActivite?.let { Text(it) }
                 },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropDownExpanded)},
-                modifier = modifier
-                    .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropDownExpanded) },
+                modifier = Modifier
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     .fillMaxWidth()
             )
             ExposedDropdownMenu(
                 expanded = dropDownExpanded,
-                onDismissRequest = {dropDownExpanded = false}
+                onDismissRequest = { dropDownExpanded = false }
             ) {
-                TypeActivite.entries.forEach {
-                    activite ->
+                TypeActivite.entries.forEach { activite ->
                     DropdownMenuItem(
-                        text = { Text(activite.toString())},
+                        text = { Text(stringResource(activite.labelRes)) },
                         onClick = {
                             onActiviteChange(activite)
-                            dropDownExpanded = false;
+                            dropDownExpanded = false
                         }
                     )
                 }
             }
-
         }
+
+        // Lieu
         OutlinedTextField(
             value = uiState.lieu,
             onValueChange = onLieuChange,
             label = { Text(stringResource(R.string.lieu_form_lbl)) },
             isError = uiState.erreurLieu != null,
             supportingText = {
-                uiState.erreurLieu?.let {
-                    Text(it)
-                }
+                uiState.erreurLieu?.let { Text(it) }
             },
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Location Type (Extérieur / Intérieur)
         SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
             SegmentedButton(
                 selected = uiState.exterieur,
                 onClick = { onExterieurChange(true) },
                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
-            ) { Text("Extérieur") }
+            ) { Text(stringResource(R.string.lieu_exterieur)) }
 
             SegmentedButton(
                 selected = !uiState.exterieur,
                 onClick = { onExterieurChange(false) },
                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
-            ) { Text("Intérieur") }
+            ) { Text(stringResource(R.string.lieu_interieur)) }
         }
-        Text(stringResource(R.string.intensite_form_lbl, uiState.intensite), style = MaterialTheme.typography.labelLarge)
+
+        // Intensité
+        Text(
+            stringResource(R.string.intensite_form_lbl, uiState.intensite),
+            style = MaterialTheme.typography.labelLarge
+        )
         Slider(
             value = uiState.intensite.toFloat(),
             onValueChange = { onIntensiteChange(it.roundToInt()) },
             valueRange = 0f..10f,
-            steps = 9, // 9 steps between 0 and 10 = 11 discrete positions (0,1,2...10)
+            steps = 9,
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Notes
         OutlinedTextField(
             value = uiState.notes,
             onValueChange = onNotesChange,
-            label = { Text("Notes : ")},
+            label = { Text(stringResource(R.string.label_notes)) },
             isError = uiState.erreurNotes != null,
             supportingText = {
-                uiState.erreurNotes?.let {
-                    Text(it)
-                }
+                uiState.erreurNotes?.let { Text(it) }
             },
             minLines = 3,
             maxLines = 6,
             modifier = Modifier.fillMaxWidth()
         )
+
+        // Save Button
         Button(
             onClick = onSaveClick,
-            enabled = !uiState.isSaving,
+            enabled = isFormValid && !uiState.isSaving,
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(stringResource(R.string.creer_form_btn_txt))
         }
 
+        // Global Error Message
         uiState.erreur?.let {
             Text(
                 text = stringResource(R.string.erreur_form_lbl, it),
@@ -221,16 +232,15 @@ fun CreateEntrainementContent(
         }
     }
 }
-@Preview(
-        uiMode = AndroidUiModes.UI_MODE_NIGHT_NO
-)
+
+@Preview(uiMode = AndroidUiModes.UI_MODE_NIGHT_NO)
 @Composable
 fun CreateEntrainementScreenPreview() {
     TrainingApp {
         CreateEntrainementContent(
             uiState = CreateEntrainementsUiState(
                 titre = "Course matinale",
-                activite = TypeActivite.COURSE, // use one of your real enum values
+                activite = TypeActivite.COURSE,
                 lieu = "Parc",
                 exterieur = true,
                 intensite = 6,
