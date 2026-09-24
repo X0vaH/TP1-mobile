@@ -2,7 +2,6 @@ package com.example.tp1.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -28,6 +28,22 @@ class EntrainementsViewModel(
         chargerEntrainements()
     }
 
+    val accueilUiState: StateFlow<AccueilUiState> = _uiState
+        .map { etat ->
+            AccueilUiState(
+                totalSeances = etat.entrainements.size,
+                seancesCompletees = etat.entrainements.count { it.estComplete },
+                prochaineSeance = etat.entrainements.firstOrNull { !it.estComplete },
+                isLoading = etat.isLoading,
+                errorMessage = etat.errorMessage
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = AccueilUiState()
+        )
+
 
     val detailUiState: StateFlow<EntrainementDetailUiState> = combine(
         _uiState, _idSelectionne, _afficherDialogueSuppression
@@ -43,10 +59,6 @@ class EntrainementsViewModel(
         initialValue = EntrainementDetailUiState()
     )
 
-    fun selectionneEntrainement(entrainement: Entrainement) {
-        _uiState.update { it.copy(entrainementSelectionne = entrainement) }
-    }
-
     fun onRechercheChange(query: String) {
         _uiState.update { it.copy(rechercheQuery = query) }
     }
@@ -57,10 +69,6 @@ class EntrainementsViewModel(
 
     fun onTypeActiviteChange(type: TypeActivite?) {
         _uiState.update { it.copy(typeActiviteSelectionne = type) }
-    }
-
-    fun ajouterEntrainement(entrainement: Entrainement) {
-        viewModelScope.launch { repository.ajouter(entrainement) }
     }
 
     fun basculerComplete(id: Int) {

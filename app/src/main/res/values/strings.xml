@@ -1,5 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" tools:ignore="Typos">TP1</string>
+    <string name="compteur_seances">%1$d / %2$d séances complétées</string>
+    <string name="pourcentage_progression">%1$d %% de progression</string>
+    <string name="titre_prochaine_seance">Prochaine séance</string>
+    <string name="aucune_seance_a_venir">Aucune séance à venir</string>
+    <string name="tous_les_entrainements">Tous les entraînements</string>
+    <string name="activite_form_lbl">Activité</string>
+    <string name="titre_form_lbl">Titre</string>
+    <string name="lieu_form_lbl">Lieu</string>
+    <string name="erreur_form_lbl">Erreur : %1$s</string>
+    <string name="creer_form_btn_txt">Créer</string>
+    <string name="intensite_form_lbl">Intensité : %1$d</string>
+    <string name="rechercher_titre">Rechercher par titre</string>
+    <string name="filtre_favoris">Favoris</string>
+    <string name="filtre_tous">Tous</string>
+    <string name="aucun_entrainement_trouve">Aucun entraînement trouvé</string>
+    <string name="creer_entrainement_cd">Créer un entraînement</string>
+    <string name="recherche_cd">Recherche</string>
+    <string name="retirer_favoris">Retirer des favoris</string>
+    <string name="ajouter_favoris">Ajouter aux favoris</string>
     <string name="txt_details">Détails</string>
     <string name="retour">Retour</string>
     <string name="supprimer">Supprimer</string>
@@ -32,18 +51,6 @@
     <string name="activite_natation">Natation</string>
     <string name="activite_yoga">Yoga</string>
     <string name="activite_autre">Autre</string>
-    <string name="activite_form_lbl">Activité</string>
-    <string name="titre_form_lbl">Titre</string>
-    <string name="lieu_form_lbl">Lieu</string>
-    <string name="erreur_form_lbl">Erreur : %1$s</string>
-    <string name="creer_form_btn_txt">Créer</string>
-    <string name="intensite_form_lbl">Intensité : %1$d</string>
-    <string name="rechercher_titre">Rechercher par titre</string>
-    <string name="filtre_favoris">Favoris</string>
-    <string name="filtre_tous">Tous</string>
-    <string name="aucun_entrainement_trouve">Aucun entraînement trouvé</string>
-    <string name="creer_entrainement_cd">Créer un entraînement</string>
-    <string name="recherche_cd">Recherche</string>
-    <string name="retirer_favoris">Retirer des favoris</string>
-    <string name="ajouter_favoris">Ajouter aux favoris</string>
+
+
 </resources>
