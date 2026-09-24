@@ -1,4 +1,4 @@
-package com.example.tp1.ui.theme.components
+package com.example.tp1.ui.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

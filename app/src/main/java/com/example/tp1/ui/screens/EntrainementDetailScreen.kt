@@ -1,4 +1,4 @@
-package com.example.tp1.ui.theme.screens
+package com.example.tp1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,8 +36,8 @@ import com.example.tp1.R
 import com.example.tp1.data.Entrainement
 import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.TrainingApp
-import com.example.tp1.ui.theme.components.ConfirmationSuppressionDialog
-import com.example.tp1.ui.theme.components.DetailChamp
+import com.example.tp1.ui.components.ConfirmationSuppressionDialog
+import com.example.tp1.ui.components.DetailChamp
 import com.example.tp1.viewmodel.EntrainementDetailUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
 

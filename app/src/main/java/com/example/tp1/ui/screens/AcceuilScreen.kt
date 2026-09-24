@@ -1,4 +1,4 @@
-package com.example.tp1.ui.theme.screens
+package com.example.tp1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tp1.R
 import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.TrainingApp
-import com.example.tp1.ui.theme.components.ProchaineSeanceCard
+import com.example.tp1.ui.components.ProchaineSeanceCard
 import com.example.tp1.viewmodel.AccueilUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
 import kotlin.math.roundToInt

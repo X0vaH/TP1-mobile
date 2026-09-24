@@ -1,4 +1,4 @@
-package com.example.tp1.ui.theme.screens
+package com.example.tp1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
@@ -20,6 +21,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,7 +40,7 @@ import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.TrainingApp
-import com.example.tp1.ui.theme.components.EntrainementCard
+import com.example.tp1.ui.components.EntrainementCard
 import com.example.tp1.viewmodel.EntrainementsUiState
 import com.example.tp1.viewmodel.EntrainementsViewModel
 
@@ -48,24 +50,33 @@ import com.example.tp1.viewmodel.EntrainementsViewModel
 fun EntrainementsScreen(
     viewModel: EntrainementsViewModel,
     onDetailsClick: (Int) -> Unit,
-    onCreateClick: () -> Unit
+    onCreateClick: () -> Unit,
+    onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) }
+                title = { Text(stringResource(R.string.app_name)) },
+                navigationIcon = {
+                    IconButton (onClick = onBack) {
+                        Icon (
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.retour)
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onCreateClick) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.creer_entrainement_cd)
+                    contentDescription = stringResource(R.string.entrainement_introuvable)
                 )
             }
-        }
+        },
     ) { innerPadding ->
         EntrainementContent(
             uiState = uiState,
@@ -132,7 +143,7 @@ fun EntrainementContent(
 
                 // Filter chips (Favoris + Types d'activité)
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     item {
                         FilterChip(

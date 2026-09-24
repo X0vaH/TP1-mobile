@@ -2,6 +2,7 @@ package com.example.tp1.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tp1.R
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.repository.FakeEntrainementRepository
@@ -80,27 +81,27 @@ class CreateEntrainementsViewModel(
 
         if (state.titre.length < 3) {
             _uiState.update {
-                it.copy(erreurTitre = "Le titre doit contenire au moins 3 caractères")
+                it.copy(erreurTitre = R.string.error_title.toString())
             }
             formulaireValide = false
         }
 
         if (state.lieu.isBlank()) {
             _uiState.update {
-                it.copy(erreurLieu = "Le lieu est obligatoire")
+                it.copy(erreurLieu = R.string.erreur_location.toString())
             }
             formulaireValide = false
         }
 
         if (state.intensite !in 1..10) {
             _uiState.update {
-                it.copy(erreurIntensite = "L'intensité est obligatoire")
+                it.copy(erreurIntensite = R.string.error_intensity.toString())
             }
             formulaireValide = false
         }
         if (state.activite == null) {
             _uiState.update {
-                it.copy(erreurActivite = "Le type d'activité est obligatoire")
+                it.copy(erreurActivite = R.string.error_activity_type.toString())
             }
             formulaireValide = false
         }
