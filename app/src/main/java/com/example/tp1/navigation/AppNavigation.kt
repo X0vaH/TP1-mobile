@@ -2,12 +2,14 @@ package com.example.tp1.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.tp1.EntrainementApplication
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import com.example.tp1.ui.screens.AccueilScreen
@@ -22,7 +24,9 @@ fun AppNavigation(
     navController: NavHostController = rememberNavController()
 ) {
     // Created ONCE for the whole app. Both ViewModels below read/write this same instance.
-    val repository: IEntrainementRepository = remember { FakeEntrainementRepository() }
+    val context = LocalContext.current
+    val app = context.applicationContext as EntrainementApplication
+    val repository = app.repository
     val viewModel: EntrainementsViewModel = viewModel { EntrainementsViewModel(repository) }
 
     NavHost(navController = navController, startDestination = AccueilRoute) {
