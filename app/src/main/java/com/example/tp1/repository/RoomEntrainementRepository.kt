@@ -24,7 +24,7 @@ class RoomEntrainementRepository(
 
 
     override suspend fun ajouter(entrainement: Entrainement) {
-        entrainementDao.insererEntrainement(entrainement.toEntity())
+        entrainementDao.insererEntrainement(entrainement.toEntity().copy(id = 0))
     }
 
     override suspend fun basculerComplete(id: Int) {

@@ -6,7 +6,7 @@ import com.example.tp1.data.TypeActivite
 @Entity(tableName = "entrainements")
 data class EntrainementEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val titre: String,
     val activite: TypeActivite,
     val lieu: String,
