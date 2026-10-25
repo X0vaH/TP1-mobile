@@ -18,13 +18,13 @@ interface EntrainementDAO {
     suspend fun trouverParId(id: Int) : EntrainementEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insererEntrainement(entrainement: Entrainement)
+    suspend fun insererEntrainement(entrainement: EntrainementEntity)
 
     @Update
-    suspend fun modifierEntrainement(entrainement: Entrainement)
+    suspend fun modifierEntrainement(entrainement: EntrainementEntity)
 
     @Delete
-    suspend fun supprimerEntrainement(entrainement: Entrainement)
+    suspend fun supprimerEntrainement(entrainement: EntrainementEntity)
 
     @Query("DELETE FROM entrainements WHERE id = :id")
     suspend fun supprimerParId(id: Int)
