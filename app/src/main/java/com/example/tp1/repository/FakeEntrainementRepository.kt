@@ -1,6 +1,7 @@
 package com.example.tp1.repository
 
 import com.example.tp1.data.Entrainement
+import com.example.tp1.network.ExerciceDTO
 import com.example.tp1.data.TypeActivite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,6 +25,19 @@ class FakeEntrainementRepository : IEntrainementRepository {
 
     override fun observerEntrainements(): Flow<List<Entrainement>> = entrainements.asStateFlow()
 
+    override suspend fun obtenirParId(id: Int): Entrainement? = entrainements.value.find { it.id == id }
+
+    override suspend fun modifier(entrainement: Entrainement) {
+        require(entrainements.value.any { it.id == entrainement.id }) { "Cette séance n'existe plus." }
+        entrainements.update { liste ->
+            liste.map { actuel ->
+                if (actuel.id == entrainement.id) entrainement.copy(
+                    estComplete = actuel.estComplete,
+                    estFavori = actuel.estFavori
+                ) else actuel
+            }
+        }
+    }
     override suspend fun ajouter(entrainement: Entrainement) = withContext(Dispatchers.IO) {
         delay(300.milliseconds)
         entrainements.update { liste ->
@@ -46,6 +60,16 @@ class FakeEntrainementRepository : IEntrainementRepository {
 
     override suspend fun supprimer(id: Int) = withContext(Dispatchers.IO) {
         entrainements.update { liste -> liste.filter { it.id != id } }
+    }
+
+    override suspend fun rechercherExercicesDepuisApi(
+        motCle: String,
+        apiKey: String
+    ): Result<List<ExerciceDTO>> {
+        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour importer depuis MoveBase."))
+    }
+    override suspend fun importerExercice(exercice: ExerciceDTO): Result<Unit> {
+        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour importer depuis MoveBase."))
     }
 }
 

@@ -2,6 +2,10 @@ package com.example.tp1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -57,7 +61,7 @@ fun CreateEntrainementScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.creer_entrainement_cd)) },
+                title = { Text(stringResource(if (uiState.estModification) R.string.modifier_seance else R.string.creer_entrainement_cd)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -98,7 +102,8 @@ fun CreateEntrainementContent(
     onIntensiteChange: (Int) -> Unit,
     onNotesChange: (String) -> Unit
 ) {
-    val isFormValid = uiState.titre.isNotBlank() &&
+    val isFormValid = !uiState.isLoading && uiState.titre.trim().length >= 3 &&
+            uiState.intensite in 1..10 &&
             uiState.activite != null &&
             uiState.lieu.isNotBlank() &&
             uiState.erreurTitre == null &&
@@ -109,9 +114,15 @@ fun CreateEntrainementContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .imePadding()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        if (uiState.isLoading) {
+            CircularProgressIndicator()
+            return@Column
+        }
         // Titre
         OutlinedTextField(
             value = uiState.titre,
@@ -195,8 +206,8 @@ fun CreateEntrainementContent(
         Slider(
             value = uiState.intensite.toFloat(),
             onValueChange = { onIntensiteChange(it.roundToInt()) },
-            valueRange = 0f..10f,
-            steps = 9,
+            valueRange = 1f..10f,
+            steps = 8,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -220,7 +231,7 @@ fun CreateEntrainementContent(
             enabled = isFormValid && !uiState.isSaving,
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(stringResource(R.string.creer_form_btn_txt))
+            Text(stringResource(if (uiState.estModification) R.string.enregistrer_modifications else R.string.creer_form_btn_txt))
         }
 
         // Global Error Message
