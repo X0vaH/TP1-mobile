@@ -2,10 +2,14 @@ package com.example.tp1.viewmodel
 
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
+import com.example.tp1.network.ExerciceDTO
 
 data class EntrainementsUiState(
     val entrainements: List<Entrainement> = emptyList(),
     val rechercheQuery: String = "",
+    val rechercheMoveBase: String = "",
+    val isSearching: Boolean = false,
+    val rechercheApi: RechercheMoveBaseUiState = RechercheMoveBaseUiState(),
     val filtreFavoris: Boolean = false,
     val typeActiviteSelectionne: TypeActivite? = null,
     val isLoading: Boolean = false,
@@ -22,3 +26,14 @@ data class EntrainementsUiState(
             }
         }
 }
+
+// La recherche réseau ne modifie Room que lorsque l'utilisateur choisit Ajouter.
+data class RechercheMoveBaseUiState(
+    val query: String = "",
+    val isSearching: Boolean = false,
+    val erreur: String? = null,
+    val resultats: List<ExerciceDTO> = emptyList(),
+    val afficherResultats: Boolean = false,
+    val idImportEnCours: String? = null,
+    val idsImportes: Set<String> = emptySet()
+)

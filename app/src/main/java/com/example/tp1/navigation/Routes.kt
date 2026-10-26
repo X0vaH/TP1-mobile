@@ -13,3 +13,5 @@ data class DetailRoute(val id: Int)
 
 @Serializable
 object CreerRoute
+@Serializable
+data class ModifierRoute(val id: Int)

@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,7 +46,8 @@ import com.example.tp1.viewmodel.EntrainementsViewModel
 fun EntrainementDetailScreen(
     id: Int,
     viewModel: EntrainementsViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onModifierClick: () -> Unit = {}
 ) {
     val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
 
@@ -54,6 +56,7 @@ fun EntrainementDetailScreen(
     EntrainementDetailContent(
         uiState = uiState,
         onBack = onBack,
+        onModifierClick = onModifierClick,
         onCompleteChange = { viewModel.basculerComplete(id) },
         onSupprimerClick = viewModel::afficherDialogueSuppression,
         onAnnulerSuppression = viewModel::masquerDialogueSuppression,
@@ -72,7 +75,8 @@ fun EntrainementDetailContent(
     onCompleteChange: () -> Unit,
     onSupprimerClick: () -> Unit,
     onAnnulerSuppression: () -> Unit,
-    onConfirmerSuppression: () -> Unit
+    onConfirmerSuppression: () -> Unit,
+    onModifierClick: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -88,6 +92,12 @@ fun EntrainementDetailContent(
                 },
                 actions = {
                     if (uiState.entrainement != null) {
+                        IconButton(onClick = onModifierClick) {
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = stringResource(R.string.modifier_seance)
+                            )
+                        }
                         IconButton(onClick = onSupprimerClick) {
                             Icon(
                                 Icons.Default.Delete,

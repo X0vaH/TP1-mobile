@@ -11,15 +11,43 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 class CreateEntrainementsViewModel(
-    private val repository: IEntrainementRepository = FakeEntrainementRepository()
+    private val repository: IEntrainementRepository = FakeEntrainementRepository(),
+    private val entrainementId: Int? = null
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CreateEntrainementsUiState())
+    private val _uiState = MutableStateFlow(CreateEntrainementsUiState(isLoading = entrainementId != null, estModification = entrainementId != null))
 
     val uiState = _uiState.asStateFlow()
 
+    private var entrainementOriginal: Entrainement? = null
+
+    init {
+        if (entrainementId != null) {
+            viewModelScope.launch {
+                try {
+                    val seance = repository.obtenirParId(entrainementId)
+                        ?: throw IllegalArgumentException("Cette séance n'existe plus.")
+                    entrainementOriginal = seance
+                    _uiState.value = CreateEntrainementsUiState(
+                        titre = seance.titre,
+                        activite = seance.activite,
+                        lieu = seance.lieu,
+                        exterieur = seance.exterieur,
+                        intensite = seance.intensite,
+                        notes = seance.notes,
+                        estModification = true
+                    )
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    _uiState.update { it.copy(isLoading = false, erreur = e.message ?: "Impossible de charger la séance.") }
+                }
+            }
+        }
+    }
     fun modifierTitre(titre: String) {
         _uiState.update {
             it.copy(
@@ -77,9 +105,11 @@ class CreateEntrainementsViewModel(
     fun creerEntrainement(onSuccess: ()-> Unit) {
         val state = _uiState.value
 
+        if (state.isSaving || state.isLoading || (entrainementId != null && entrainementOriginal == null)) return
+
         var formulaireValide = true
 
-        if (state.titre.length < 3) {
+        if (state.titre.trim().length < 3) {
             _uiState.update {
                 it.copy(erreurTitre = R.string.error_title.toString())
             }
@@ -111,20 +141,25 @@ class CreateEntrainementsViewModel(
             _uiState.update { it.copy(isSaving = true, erreur = null) }
 
             try {
-                repository.ajouter(
-                    Entrainement(
-                        id = -1,
-                        titre = state.titre,
-                        activite = state.activite!!,
-                        lieu = state.lieu,
-                        exterieur = state.exterieur,
-                        intensite = state.intensite,
-                        notes = state.notes
-                    )
+                val seance = Entrainement(
+                    id = entrainementId ?: -1,
+                    titre = state.titre.trim(),
+                    activite = state.activite!!,
+                    lieu = state.lieu.trim(),
+                    exterieur = state.exterieur,
+                    intensite = state.intensite,
+                    notes = state.notes
                 )
-
+                if (entrainementId == null) {
+                    repository.ajouter(seance)
+                } else {
+                    repository.modifier(seance)
+                }
+                _uiState.update { it.copy(isSaving = false) }
                 onSuccess()
 
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(

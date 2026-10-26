@@ -2,7 +2,11 @@ package com.example.tp1.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tp1.BuildConfig
+import com.example.tp1.network.ExerciceDTO
+import kotlinx.coroutines.flow.update
 import com.example.tp1.data.TypeActivite
+import kotlinx.coroutines.CancellationException
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +29,11 @@ class EntrainementsViewModel(
     private val _afficherDialogueSuppression = MutableStateFlow(false)
     private val _errorMessage = MutableStateFlow<String?>(null)
 
+    private val rechercheApiState = MutableStateFlow(RechercheMoveBaseUiState())
+    private val filtresState = combine(_rechercheQuery, _filtreFavoris, _typeActivite) { query, favoris, type ->
+        Triple(query, favoris, type)
+    }
+
     // Room source, shared by the three screens
     private val entrainementsFlow = repository.observerEntrainements()
         .catch { e ->
@@ -35,11 +44,14 @@ class EntrainementsViewModel(
     // List screen
     val uiState: StateFlow<EntrainementsUiState> = combine(
         entrainementsFlow,
-        _rechercheQuery,
-        _filtreFavoris,
-        _typeActivite,
-        _errorMessage
-    ) { liste, recherche, favoris, type, erreur ->
+        filtresState,
+        _errorMessage,
+        rechercheApiState
+    ) { liste, filtresLocaux, erreur, rechercheApi ->
+        val (recherche, favoris, type) = filtresLocaux
+        val queryApi = rechercheApi.query
+        val searching = rechercheApi.isSearching
+        val importError = rechercheApi.erreur
         val filtres = liste
             .filter { it.titre.contains(recherche, ignoreCase = true) }
             .filter { !favoris || it.estFavori }
@@ -48,8 +60,11 @@ class EntrainementsViewModel(
         EntrainementsUiState(
             entrainements = filtres,
             isLoading = false,
-            errorMessage = erreur,
+            errorMessage = erreur ?: importError,
             rechercheQuery = recherche,
+            rechercheMoveBase = queryApi,
+            isSearching = searching,
+            rechercheApi = rechercheApi,
             filtreFavoris = favoris,
             typeActiviteSelectionne = type
         )
@@ -118,5 +133,70 @@ class EntrainementsViewModel(
         supprimerEntrainement(id)
     }
 
-    fun effacerErreur() { _errorMessage.value = null }
+    fun onRechercheMoveBaseChange(query: String) {
+        if (rechercheApiState.value.isSearching || rechercheApiState.value.idImportEnCours != null) return
+        rechercheApiState.update { it.copy(query = query, erreur = null, resultats = emptyList(), afficherResultats = false) }
+    }
+
+    fun rechercherExercices() {
+        val state = rechercheApiState.value
+        val query = state.query.trim()
+        if (query.isEmpty() || state.isSearching || state.idImportEnCours != null) return
+        rechercheApiState.update { it.copy(isSearching = true, erreur = null, resultats = emptyList(), afficherResultats = false) }
+        viewModelScope.launch {
+            try {
+                repository.rechercherExercicesDepuisApi(query, BuildConfig.API_KEY)
+                    .onSuccess { exercices ->
+                        rechercheApiState.update { it.copy(resultats = exercices, afficherResultats = true) }
+                    }
+                    .onFailure { e ->
+                        rechercheApiState.update { it.copy(erreur = e.message ?: "Erreur lors de la recherche.") }
+                    }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                rechercheApiState.update { it.copy(erreur = e.message ?: "Erreur lors de la recherche.") }
+            } finally {
+                rechercheApiState.update { it.copy(isSearching = false) }
+            }
+        }
+    }
+
+    fun importerExercice(exercice: ExerciceDTO) {
+        val state = rechercheApiState.value
+        if (state.isSearching || state.idImportEnCours != null || exercice.id in state.idsImportes) return
+        if (state.resultats.none { it.id == exercice.id }) return
+        rechercheApiState.update { it.copy(idImportEnCours = exercice.id, erreur = null) }
+        viewModelScope.launch {
+            try {
+                repository.importerExercice(exercice)
+                    .onSuccess {
+                        rechercheApiState.update { it.copy(idsImportes = it.idsImportes + exercice.id) }
+                        _rechercheQuery.value = ""
+                        _filtreFavoris.value = false
+                        _typeActivite.value = null
+                    }
+                    .onFailure { e ->
+                        rechercheApiState.update { it.copy(erreur = e.message ?: "Erreur lors de l'importation.") }
+                    }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                rechercheApiState.update { it.copy(erreur = e.message ?: "Erreur lors de l'importation.") }
+            } finally {
+                rechercheApiState.update { it.copy(idImportEnCours = null) }
+            }
+        }
+    }
+
+    fun fermerResultatsMoveBase() {
+        if (rechercheApiState.value.idImportEnCours == null) {
+            rechercheApiState.update { it.copy(afficherResultats = false) }
+        }
+    }
+
+    fun effacerErreur() {
+        _errorMessage.value = null
+        rechercheApiState.update { it.copy(erreur = null) }
+    }
 }

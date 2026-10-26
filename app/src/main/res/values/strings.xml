@@ -57,4 +57,6 @@
     <string name="error_activity_type">Le type d\'activité est obligatoire</string>
 
 
+    <string name="modifier_seance">Modifier la séance</string>
+    <string name="enregistrer_modifications">Enregistrer les modifications</string>
 </resources>

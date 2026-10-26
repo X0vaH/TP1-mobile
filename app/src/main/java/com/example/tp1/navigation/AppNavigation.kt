@@ -50,8 +50,20 @@ fun AppNavigation(
             val route: DetailRoute = backStackEntry.toRoute()
             EntrainementDetailScreen(
                 id = route.id,
+                onModifierClick = { navController.navigate(ModifierRoute(route.id)) },
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() }
+            )
+        }
+        composable<ModifierRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<ModifierRoute>()
+            val editViewModel: CreateEntrainementsViewModel = viewModel {
+                CreateEntrainementsViewModel(repository, entrainementId = route.id)
+            }
+            CreateEntrainementScreen(
+                onBackClick = { navController.popBackStack() },
+                onEntrainementCreated = { navController.popBackStack() },
+                viewModel = editViewModel
             )
         }
         composable<CreerRoute> {

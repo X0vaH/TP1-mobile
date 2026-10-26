@@ -1,24 +1,20 @@
 package com.example.tp1.network
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExerciceDTO(
-    val id: String,
-    val slug: String,
-    val name: String,
-    val category: String,
-    val equipment: String,
-    val target: String,
-    val muscleGroup: String,
-    val secondaryMuscles: List<String>,
-    val lang: String,
-    val instructions: String,
-    val instructionSteps: List<String>,
-    val attribution: String,
-    val imageUrl: String,
-    val gifUrl: String,
-    val createdAt: String
+    @SerialName("id") val id: String,
+    @SerialName("slug") val slug: String,
+    @SerialName("name") val name: String,
+    @SerialName("instructions") val instructions: String,
+    @SerialName("target") val target: String,
+    @SerialName("category") val category: String,
+    @SerialName("equipment") val equipment: String,
+    @SerialName("lang") val lang: String,
+    @SerialName("attribution") val attribution: String,
+    @SerialName("createdAt") val createdAt: String
 )
 
 @Serializable

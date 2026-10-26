@@ -16,6 +16,8 @@ data class CreateEntrainementsUiState (
     val erreurIntensite: String? = null,
     val erreurNotes: String? = null,
     val isSaving: Boolean = false,
+    val isLoading: Boolean = false,
+    val estModification: Boolean = false,
     val erreur: String? = null
 
 )
