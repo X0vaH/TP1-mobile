@@ -10,4 +10,6 @@ interface IEntrainementRepository {
     suspend fun basculerComplete(id: Int)
     suspend fun basculerFavori(id: Int)
     suspend fun supprimer(id: Int)
+
+    suspend fun importerExerciceDepuisApi(motCle: String, apiKey: String): Result<Unit>
 }
