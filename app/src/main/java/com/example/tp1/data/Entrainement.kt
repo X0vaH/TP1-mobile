@@ -9,5 +9,6 @@ data class Entrainement(
     val intensite: Int,
     val notes: String,
     val estComplete: Boolean =false,
-    val estFavori: Boolean = false
+    val estFavori: Boolean = false,
+    val exercices: List<ExerciceSeance> = emptyList()
 )

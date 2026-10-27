@@ -1,0 +1,169 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "69e95de80498a1986e5ac864929dc94b",
+    "entities": [
+      {
+        "tableName": "entrainements",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `titre` TEXT NOT NULL, `activite` TEXT NOT NULL, `lieu` TEXT NOT NULL, `exterieur` INTEGER NOT NULL, `intensite` INTEGER NOT NULL, `notes` TEXT NOT NULL, `estComplete` INTEGER NOT NULL, `estFavori` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titre",
+            "columnName": "titre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activite",
+            "columnName": "activite",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lieu",
+            "columnName": "lieu",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exterieur",
+            "columnName": "exterieur",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intensite",
+            "columnName": "intensite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estComplete",
+            "columnName": "estComplete",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estFavori",
+            "columnName": "estFavori",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "exercices_seance",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `entrainementId` INTEGER NOT NULL, `idExterne` TEXT NOT NULL, `nom` TEXT NOT NULL, `cible` TEXT NOT NULL, `equipement` TEXT NOT NULL, `series` INTEGER NOT NULL, `repetitions` INTEGER NOT NULL, `charge` REAL NOT NULL, FOREIGN KEY(`entrainementId`) REFERENCES `entrainements`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "entrainementId",
+            "columnName": "entrainementId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idExterne",
+            "columnName": "idExterne",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nom",
+            "columnName": "nom",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cible",
+            "columnName": "cible",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "equipement",
+            "columnName": "equipement",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "series",
+            "columnName": "series",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "repetitions",
+            "columnName": "repetitions",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "charge",
+            "columnName": "charge",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_exercices_seance_entrainementId",
+            "unique": false,
+            "columnNames": [
+              "entrainementId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_exercices_seance_entrainementId` ON `${TABLE_NAME}` (`entrainementId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "entrainements",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "entrainementId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69e95de80498a1986e5ac864929dc94b')"
+    ]
+  }
+}

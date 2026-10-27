@@ -11,6 +11,7 @@ class EntrainementApplication : Application() {
     val exerciceApiService by lazy { RetrofitInstance.api }
     val repository by lazy { RoomEntrainementRepository(
         database.entrainementDao(),
+        database.exerciceSeanceDao(),
         exerciceApiService
     )}
 }

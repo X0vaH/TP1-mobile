@@ -2,8 +2,10 @@ package com.example.tp1.repository
 
 import retrofit2.HttpException
 import com.example.tp1.data.Entrainement
+import com.example.tp1.data.ExerciceSeance
 import com.example.tp1.data.TypeActivite
-import com.example.tp1.database.EntrainementDAO
+import com.example.tp1.database.dao.EntrainementDAO
+import com.example.tp1.database.dao.ExerciceSeanceDAO
 import com.example.tp1.database.toEntity
 import com.example.tp1.database.toModel
 import com.example.tp1.network.ExerciceApiService
@@ -16,6 +18,7 @@ import java.io.IOException
 
 class RoomEntrainementRepository(
     private val entrainementDao: EntrainementDAO,
+    private val exerciceSeanceDao: ExerciceSeanceDAO,
     private val apiService: ExerciceApiService = RetrofitInstance.api
 ) : IEntrainementRepository {
     override suspend fun chargerEntrainements(): List<Entrainement> {
@@ -35,6 +38,14 @@ class RoomEntrainementRepository(
         return entrainementDao.trouverParId(id)?.toModel()
     }
 
+    override suspend fun obtenirAvecExercices(id: Int): Entrainement? {
+        return entrainementDao.getEntrainementAvecExercices(id)?.toModel()
+    }
+
+    override fun observerAvecExercices(id: Int): Flow<Entrainement?> {
+        return entrainementDao.observerEntrainementAvecExercices(id).map { it?.toModel() }
+    }
+
     override suspend fun modifier(entrainement: Entrainement) {
         val actuel = obtenirParId(entrainement.id)
             ?: throw IllegalArgumentException("Cette séance n'existe plus.")
@@ -51,9 +62,17 @@ class RoomEntrainementRepository(
                 notes = entrainement.notes
             ).toEntity()
         )
+        remplacerExercices(id = actuel.id, exercices = entrainement.exercices)
     }
+
     override suspend fun ajouter(entrainement: Entrainement) {
-        entrainementDao.insererEntrainement(entrainement.toEntity().copy(id = 0))
+        val id = entrainementDao.insererEntrainement(entrainement.toEntity().copy(id = 0))
+        remplacerExercices(id = id.toInt(), exercices = entrainement.exercices)
+    }
+
+    private suspend fun remplacerExercices(id: Int, exercices: List<ExerciceSeance>) {
+        exerciceSeanceDao.supprimerParEntrainement(id)
+        exerciceSeanceDao.insererExercices(exercices.map { it.toEntity(id) })
     }
 
     override suspend fun basculerComplete(id: Int) {

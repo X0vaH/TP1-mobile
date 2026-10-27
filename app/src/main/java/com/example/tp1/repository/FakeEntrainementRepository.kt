@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
@@ -26,6 +27,11 @@ class FakeEntrainementRepository : IEntrainementRepository {
     override fun observerEntrainements(): Flow<List<Entrainement>> = entrainements.asStateFlow()
 
     override suspend fun obtenirParId(id: Int): Entrainement? = entrainements.value.find { it.id == id }
+
+    override suspend fun obtenirAvecExercices(id: Int): Entrainement? = obtenirParId(id)
+
+    override fun observerAvecExercices(id: Int): Flow<Entrainement?> =
+        entrainements.map { liste -> liste.find { it.id == id } }
 
     override suspend fun modifier(entrainement: Entrainement) {
         require(entrainements.value.any { it.id == entrainement.id }) { "Cette séance n'existe plus." }
