@@ -59,4 +59,18 @@
 
     <string name="modifier_seance">Modifier la séance</string>
     <string name="enregistrer_modifications">Enregistrer les modifications</string>
+
+    <string name="exercices_titre">Exercices</string>
+    <string name="ajouter_exercice">Ajouter un exercice</string>
+    <string name="aucun_exercice">Aucun exercice ajouté</string>
+    <string name="retirer_exercice">Retirer l\'exercice</string>
+    <string name="label_series">Séries</string>
+    <string name="label_repetitions">Répétitions</string>
+    <string name="label_charge">Charge (kg)</string>
+    <string name="exercice_cible">Muscle ciblé : %1$s</string>
+    <string name="recherche_exercice_titre">Rechercher un exercice</string>
+    <string name="recherche_exercice_label">Mot-clé</string>
+    <string name="rechercher">Rechercher</string>
+    <string name="fermer">Fermer</string>
+    <string name="aucun_resultat_exercice">Aucun exercice en français trouvé</string>
 </resources>

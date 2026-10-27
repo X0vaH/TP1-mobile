@@ -2,7 +2,16 @@ package com.example.tp1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.text.input.KeyboardType
+import com.example.tp1.ui.components.RechercheExerciceDialog
+import com.example.tp1.viewmodel.ExerciceFormUiState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -84,8 +93,115 @@ fun CreateEntrainementScreen(
             onLieuChange = viewModel::modifierLieu,
             onExterieurChange = viewModel::modifierExterieur,
             onIntensiteChange = viewModel::modifierIntensite,
-            onNotesChange = viewModel::modifierNotes
+            onNotesChange = viewModel::modifierNotes,
+            onAjouterExerciceClick = viewModel::ouvrirRecherche,
+            onRetirerExercice = viewModel::retirerExercice,
+            onSeriesChange = viewModel::modifierSeries,
+            onRepetitionsChange = viewModel::modifierRepetitions,
+            onChargeChange = viewModel::modifierCharge
         )
+    }
+
+    if (uiState.recherche.afficherDialogue) {
+        RechercheExerciceDialog(
+            uiState = uiState.recherche,
+            onQueryChange = viewModel::modifierQueryRecherche,
+            onRechercherClick = viewModel::rechercherExercices,
+            onExerciceClick = viewModel::ajouterExercice,
+            onDismiss = viewModel::fermerRecherche
+        )
+    }
+}
+
+@Composable
+private fun ExercicesSection(
+    exercices: List<ExerciceFormUiState>,
+    onAjouterClick: () -> Unit,
+    onRetirerClick: (Int) -> Unit,
+    onSeriesChange: (Int, String) -> Unit,
+    onRepetitionsChange: (Int, String) -> Unit,
+    onChargeChange: (Int, String) -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            stringResource(R.string.exercices_titre),
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        if (exercices.isEmpty()) {
+            Text(stringResource(R.string.aucun_exercice))
+        }
+
+        exercices.forEachIndexed { index, exercice ->
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier.padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = exercice.nom,
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(onClick = { onRetirerClick(index) }) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.retirer_exercice)
+                            )
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(
+                            value = exercice.series,
+                            onValueChange = { onSeriesChange(index, it) },
+                            label = { Text(stringResource(R.string.label_series)) },
+                            isError = exercice.erreurSeries != null,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier.weight(1f)
+                        )
+                        OutlinedTextField(
+                            value = exercice.repetitions,
+                            onValueChange = { onRepetitionsChange(index, it) },
+                            label = { Text(stringResource(R.string.label_repetitions)) },
+                            isError = exercice.erreurRepetitions != null,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier.weight(1f)
+                        )
+                        OutlinedTextField(
+                            value = exercice.charge,
+                            onValueChange = { onChargeChange(index, it) },
+                            label = { Text(stringResource(R.string.label_charge)) },
+                            isError = exercice.erreurCharge != null,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            singleLine = true,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    listOfNotNull(
+                        exercice.erreurSeries,
+                        exercice.erreurRepetitions,
+                        exercice.erreurCharge
+                    ).forEach {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            }
+        }
+
+        OutlinedButton(onClick = onAjouterClick) {
+            Icon(Icons.Default.Add, contentDescription = null)
+            Text(stringResource(R.string.ajouter_exercice))
+        }
     }
 }
 
@@ -100,7 +216,12 @@ fun CreateEntrainementContent(
     onLieuChange: (String) -> Unit,
     onExterieurChange: (Boolean) -> Unit,
     onIntensiteChange: (Int) -> Unit,
-    onNotesChange: (String) -> Unit
+    onNotesChange: (String) -> Unit,
+    onAjouterExerciceClick: () -> Unit,
+    onRetirerExercice: (Int) -> Unit,
+    onSeriesChange: (Int, String) -> Unit,
+    onRepetitionsChange: (Int, String) -> Unit,
+    onChargeChange: (Int, String) -> Unit
 ) {
     val isFormValid = !uiState.isLoading && uiState.titre.trim().length >= 3 &&
             uiState.intensite in 1..10 &&
@@ -225,6 +346,18 @@ fun CreateEntrainementContent(
             modifier = Modifier.fillMaxWidth()
         )
 
+        // Exercices (séances de musculation seulement)
+        if (uiState.activite == TypeActivite.MUSCULATION) {
+            ExercicesSection(
+                exercices = uiState.exercices,
+                onAjouterClick = onAjouterExerciceClick,
+                onRetirerClick = onRetirerExercice,
+                onSeriesChange = onSeriesChange,
+                onRepetitionsChange = onRepetitionsChange,
+                onChargeChange = onChargeChange
+            )
+        }
+
         // Save Button
         Button(
             onClick = onSaveClick,
@@ -263,7 +396,12 @@ fun CreateEntrainementScreenPreview() {
             onLieuChange = {},
             onExterieurChange = {},
             onIntensiteChange = {},
-            onNotesChange = {}
+            onNotesChange = {},
+            onAjouterExerciceClick = {},
+            onRetirerExercice = {},
+            onSeriesChange = { _, _ -> },
+            onRepetitionsChange = { _, _ -> },
+            onChargeChange = { _, _ -> }
         )
     }
 }

@@ -2,9 +2,12 @@ package com.example.tp1.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tp1.BuildConfig
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
+import com.example.tp1.data.ExerciceSeance
 import com.example.tp1.data.TypeActivite
+import com.example.tp1.network.ExerciceDTO
 import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +31,7 @@ class CreateEntrainementsViewModel(
         if (entrainementId != null) {
             viewModelScope.launch {
                 try {
-                    val seance = repository.obtenirParId(entrainementId)
+                    val seance = repository.obtenirAvecExercices(entrainementId)
                         ?: throw IllegalArgumentException("Cette séance n'existe plus.")
                     entrainementOriginal = seance
                     _uiState.value = CreateEntrainementsUiState(
@@ -38,6 +41,7 @@ class CreateEntrainementsViewModel(
                         exterieur = seance.exterieur,
                         intensite = seance.intensite,
                         notes = seance.notes,
+                        exercices = seance.exercices.map { it.toForm() },
                         estModification = true
                     )
                 } catch (e: CancellationException) {
@@ -102,6 +106,105 @@ class CreateEntrainementsViewModel(
         }
     }
 
+    fun ouvrirRecherche() {
+        _uiState.update {
+            it.copy(recherche = RechercheExerciceUiState(afficherDialogue = true))
+        }
+    }
+
+    fun fermerRecherche() {
+        _uiState.update {
+            it.copy(recherche = RechercheExerciceUiState())
+        }
+    }
+
+    fun modifierQueryRecherche(query: String) {
+        _uiState.update {
+            it.copy(recherche = it.recherche.copy(query = query, erreur = null))
+        }
+    }
+
+    fun rechercherExercices() {
+        val recherche = _uiState.value.recherche
+        val query = recherche.query.trim()
+        if (query.isEmpty() || recherche.isSearching) return
+
+        _uiState.update {
+            it.copy(
+                recherche = it.recherche.copy(
+                    isSearching = true,
+                    rechercheEffectuee = false,
+                    erreur = null,
+                    resultats = emptyList()
+                )
+            )
+        }
+        viewModelScope.launch {
+            repository.rechercherExercicesDepuisApi(query, BuildConfig.API_KEY)
+                .onSuccess { exercices ->
+                    _uiState.update {
+                        it.copy(
+                            recherche = it.recherche.copy(
+                                isSearching = false,
+                                rechercheEffectuee = true,
+                                // On ne conserve que les résultats en français
+                                resultats = exercices.filter { exercice ->
+                                    exercice.lang.equals("fr", ignoreCase = true)
+                                }
+                            )
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    _uiState.update {
+                        it.copy(
+                            recherche = it.recherche.copy(
+                                isSearching = false,
+                                erreur = e.message ?: "Erreur lors de la recherche."
+                            )
+                        )
+                    }
+                }
+        }
+    }
+
+    fun ajouterExercice(exercice: ExerciceDTO) {
+        _uiState.update {
+            it.copy(
+                exercices = it.exercices + exercice.toForm(),
+                recherche = RechercheExerciceUiState()
+            )
+        }
+    }
+
+    fun retirerExercice(index: Int) {
+        _uiState.update {
+            it.copy(exercices = it.exercices.filterIndexed { i, _ -> i != index })
+        }
+    }
+
+    fun modifierSeries(index: Int, series: String) {
+        modifierExercice(index) { it.copy(series = series, erreurSeries = null) }
+    }
+
+    fun modifierRepetitions(index: Int, repetitions: String) {
+        modifierExercice(index) { it.copy(repetitions = repetitions, erreurRepetitions = null) }
+    }
+
+    fun modifierCharge(index: Int, charge: String) {
+        modifierExercice(index) { it.copy(charge = charge, erreurCharge = null) }
+    }
+
+    private fun modifierExercice(index: Int, modification: (ExerciceFormUiState) -> ExerciceFormUiState) {
+        _uiState.update {
+            it.copy(
+                exercices = it.exercices.mapIndexed { i, exercice ->
+                    if (i == index) modification(exercice) else exercice
+                }
+            )
+        }
+    }
+
     fun creerEntrainement(onSuccess: ()-> Unit) {
         val state = _uiState.value
 
@@ -135,6 +238,14 @@ class CreateEntrainementsViewModel(
             }
             formulaireValide = false
         }
+        // Les exercices ne concernent que les séances de musculation
+        val exercices = if (state.activite == TypeActivite.MUSCULATION) state.exercices else emptyList()
+        val exercicesValides = exercices.map { it.valider() }
+        if (exercicesValides.any { it.erreurSeries != null || it.erreurRepetitions != null || it.erreurCharge != null }) {
+            _uiState.update { it.copy(exercices = exercicesValides) }
+            formulaireValide = false
+        }
+
         if (!formulaireValide) return
 
         viewModelScope.launch {
@@ -148,7 +259,8 @@ class CreateEntrainementsViewModel(
                     lieu = state.lieu.trim(),
                     exterieur = state.exterieur,
                     intensite = state.intensite,
-                    notes = state.notes
+                    notes = state.notes,
+                    exercices = exercices.map { it.toModel() }
                 )
                 if (entrainementId == null) {
                     repository.ajouter(seance)
@@ -170,4 +282,45 @@ class CreateEntrainementsViewModel(
             }
         }
     }
+}
+
+private fun ExerciceSeance.toForm(): ExerciceFormUiState {
+    return ExerciceFormUiState(
+        idExterne = idExterne,
+        nom = nom,
+        cible = cible,
+        equipement = equipement,
+        series = series.toString(),
+        repetitions = repetitions.toString(),
+        charge = charge.toString()
+    )
+}
+
+private fun ExerciceDTO.toForm(): ExerciceFormUiState {
+    return ExerciceFormUiState(
+        idExterne = id,
+        nom = name,
+        cible = target,
+        equipement = equipment
+    )
+}
+
+private fun ExerciceFormUiState.valider(): ExerciceFormUiState {
+    return copy(
+        erreurSeries = if ((series.toIntOrNull() ?: 0) < 1) "Le nombre de séries doit être un entier d'au moins 1" else null,
+        erreurRepetitions = if ((repetitions.toIntOrNull() ?: 0) < 1) "Le nombre de répétitions doit être un entier d'au moins 1" else null,
+        erreurCharge = if ((charge.replace(',', '.').toDoubleOrNull() ?: -1.0) < 0.0) "La charge doit être un nombre positif ou nul" else null
+    )
+}
+
+private fun ExerciceFormUiState.toModel(): ExerciceSeance {
+    return ExerciceSeance(
+        idExterne = idExterne,
+        nom = nom,
+        cible = cible,
+        equipement = equipement,
+        series = series.toInt(),
+        repetitions = repetitions.toInt(),
+        charge = charge.replace(',', '.').toDouble()
+    )
 }
