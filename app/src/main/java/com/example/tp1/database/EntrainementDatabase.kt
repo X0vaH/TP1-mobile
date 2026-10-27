@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [EntrainementEntity::class], version = 1, exportSchema = false)
+@Database(entities = [EntrainementEntity::class], version = 1, exportSchema = true)
 abstract class EntrainementDatabase : RoomDatabase() {
 
     abstract fun entrainementDao() : EntrainementDAO

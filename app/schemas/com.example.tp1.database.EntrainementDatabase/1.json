@@ -1,0 +1,79 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e8459809360eff1f9bdf86a10b8352d2",
+    "entities": [
+      {
+        "tableName": "entrainements",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `titre` TEXT NOT NULL, `activite` TEXT NOT NULL, `lieu` TEXT NOT NULL, `exterieur` INTEGER NOT NULL, `intensite` INTEGER NOT NULL, `notes` TEXT NOT NULL, `estComplete` INTEGER NOT NULL, `estFavori` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "titre",
+            "columnName": "titre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activite",
+            "columnName": "activite",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lieu",
+            "columnName": "lieu",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exterieur",
+            "columnName": "exterieur",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intensite",
+            "columnName": "intensite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estComplete",
+            "columnName": "estComplete",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estFavori",
+            "columnName": "estFavori",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e8459809360eff1f9bdf86a10b8352d2')"
+    ]
+  }
+}
