@@ -4,6 +4,8 @@ import retrofit2.HttpException
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.ExerciceSeance
 import com.example.tp1.data.TypeActivite
+import androidx.room.withTransaction
+import com.example.tp1.database.EntrainementDatabase
 import com.example.tp1.database.dao.EntrainementDAO
 import com.example.tp1.database.dao.ExerciceSeanceDAO
 import com.example.tp1.database.toEntity
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 
 class RoomEntrainementRepository(
+    private val database: EntrainementDatabase,
     private val entrainementDao: EntrainementDAO,
     private val exerciceSeanceDao: ExerciceSeanceDAO,
     private val apiService: ExerciceApiService = RetrofitInstance.api
@@ -52,22 +55,26 @@ class RoomEntrainementRepository(
         require(entrainement.titre.trim().length >= 3) { "Le titre doit contenir au moins 3 caractères." }
         require(entrainement.lieu.isNotBlank()) { "Veuillez saisir un lieu." }
         require(entrainement.intensite in 1..10) { "L'intensité doit être comprise entre 1 et 10." }
-        entrainementDao.modifierEntrainement(
-            actuel.copy(
-                titre = entrainement.titre.trim(),
-                activite = entrainement.activite,
-                lieu = entrainement.lieu.trim(),
-                exterieur = entrainement.exterieur,
-                intensite = entrainement.intensite,
-                notes = entrainement.notes
-            ).toEntity()
-        )
-        remplacerExercices(id = actuel.id, exercices = entrainement.exercices)
+        database.withTransaction {
+            entrainementDao.modifierEntrainement(
+                actuel.copy(
+                    titre = entrainement.titre.trim(),
+                    activite = entrainement.activite,
+                    lieu = entrainement.lieu.trim(),
+                    exterieur = entrainement.exterieur,
+                    intensite = entrainement.intensite,
+                    notes = entrainement.notes
+                ).toEntity()
+            )
+            remplacerExercices(id = actuel.id, exercices = entrainement.exercices)
+        }
     }
 
     override suspend fun ajouter(entrainement: Entrainement) {
-        val id = entrainementDao.insererEntrainement(entrainement.toEntity().copy(id = 0))
-        remplacerExercices(id = id.toInt(), exercices = entrainement.exercices)
+        database.withTransaction {
+            val id = entrainementDao.insererEntrainement(entrainement.toEntity().copy(id = 0))
+            remplacerExercices(id = id.toInt(), exercices = entrainement.exercices)
+        }
     }
 
     private suspend fun remplacerExercices(id: Int, exercices: List<ExerciceSeance>) {

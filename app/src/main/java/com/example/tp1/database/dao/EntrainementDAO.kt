@@ -3,7 +3,6 @@ package com.example.tp1.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Transaction
@@ -19,7 +18,7 @@ interface EntrainementDAO {
     @Query("SELECT * FROM entrainements WHERE id = :id")
     suspend fun trouverParId(id: Int) : EntrainementEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insererEntrainement(entrainement: EntrainementEntity): Long
 
     @Update

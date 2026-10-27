@@ -25,7 +25,7 @@ data class CreateEntrainementsUiState (
 
 )
 
-// Les champs numériques sont des String, puisque les valeurs proviennent de champs de texte.
+// Champs numériques en String (saisie texte)
 data class ExerciceFormUiState(
     val idExterne: String,
     val nom: String,

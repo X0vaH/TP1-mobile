@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 
 class CreateEntrainementsViewModel(
     private val repository: IEntrainementRepository = FakeEntrainementRepository(),
@@ -26,6 +27,7 @@ class CreateEntrainementsViewModel(
     val uiState = _uiState.asStateFlow()
 
     private var entrainementOriginal: Entrainement? = null
+    private var rechercheJob: Job? = null
 
     init {
         if (entrainementId != null) {
@@ -107,12 +109,14 @@ class CreateEntrainementsViewModel(
     }
 
     fun ouvrirRecherche() {
+        rechercheJob?.cancel()
         _uiState.update {
             it.copy(recherche = RechercheExerciceUiState(afficherDialogue = true))
         }
     }
 
     fun fermerRecherche() {
+        rechercheJob?.cancel()
         _uiState.update {
             it.copy(recherche = RechercheExerciceUiState())
         }
@@ -139,7 +143,7 @@ class CreateEntrainementsViewModel(
                 )
             )
         }
-        viewModelScope.launch {
+        rechercheJob = viewModelScope.launch {
             repository.rechercherExercicesDepuisApi(query, BuildConfig.API_KEY)
                 .onSuccess { exercices ->
                     _uiState.update {
@@ -169,6 +173,7 @@ class CreateEntrainementsViewModel(
     }
 
     fun ajouterExercice(exercice: ExerciceDTO) {
+        rechercheJob?.cancel()
         _uiState.update {
             it.copy(
                 exercices = it.exercices + exercice.toForm(),
@@ -309,7 +314,7 @@ private fun ExerciceFormUiState.valider(): ExerciceFormUiState {
     return copy(
         erreurSeries = if ((series.toIntOrNull() ?: 0) < 1) "Le nombre de séries doit être un entier d'au moins 1" else null,
         erreurRepetitions = if ((repetitions.toIntOrNull() ?: 0) < 1) "Le nombre de répétitions doit être un entier d'au moins 1" else null,
-        erreurCharge = if ((charge.replace(',', '.').toDoubleOrNull() ?: -1.0) < 0.0) "La charge doit être un nombre positif ou nul" else null
+        erreurCharge = if ((charge.replace(',', '.').toDoubleOrNull()?.takeIf { it.isFinite() } ?: -1.0) < 0.0) "La charge doit être un nombre positif ou nul" else null
     )
 }
 

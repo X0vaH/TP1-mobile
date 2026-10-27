@@ -82,15 +82,3 @@ fun EntrainementAvecExercices.toModel(): Entrainement {
         exercices = exercices.map { it.toModel() }
     )
 }
-
-fun ExerciceDTO.toExerciceSeance(): ExerciceSeance {
-    return ExerciceSeance(
-        idExterne = this.id,
-        nom = this.name,
-        cible = this.target,
-        equipement = this.equipment,
-        series = 3,
-        repetitions = 10,
-        charge = 0.0
-    )
-}
