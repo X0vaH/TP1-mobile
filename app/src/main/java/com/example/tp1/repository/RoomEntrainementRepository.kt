@@ -112,18 +112,39 @@ class RoomEntrainementRepository(
             return Result.failure(IllegalArgumentException("La clé API RapidAPI n'est pas configurée."))
         }
 
-        return try {
+        return appelerMoveBase {
             val reponse = apiService.chercherExercices(
                 motCle = recherche,
                 apiKey = apiKey,
                 langue = "fr",
                 limite = 100
             )
+            check(reponse.success) { "La recherche MoveBase a échoué." }
+            reponse.data
+        }
+    }
 
-            if (!reponse.success) {
-                return Result.failure(Exception("La recherche MoveBase a échoué."))
-            }
-            Result.success(reponse.data)
+    override suspend fun obtenirConsignesExercice(
+        idExterne: String,
+        apiKey: String
+    ): Result<ExerciceDTO> {
+        if (idExterne.isBlank()) {
+            return Result.failure(IllegalArgumentException("Exercice inconnu."))
+        }
+        if (apiKey.isBlank()) {
+            return Result.failure(IllegalArgumentException("La clé API RapidAPI n'est pas configurée."))
+        }
+
+        return appelerMoveBase {
+            val reponse = apiService.obtenirExercice(id = idExterne, apiKey = apiKey, langue = "fr")
+            check(reponse.success) { "Le chargement de l'exercice a échoué." }
+            reponse.data
+        }
+    }
+
+    private suspend fun <T> appelerMoveBase(appel: suspend () -> T): Result<T> {
+        return try {
+            Result.success(appel())
         } catch (e: CancellationException) {
             throw e
         } catch (e: IOException) {

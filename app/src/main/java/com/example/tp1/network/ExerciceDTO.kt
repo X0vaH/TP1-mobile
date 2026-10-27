@@ -23,3 +23,9 @@ data class RechercheExercicesDTO(
     val data: List<ExerciceDTO>,
 )
 
+
+@Serializable
+data class ExerciceDetailDTO(
+    val success: Boolean,
+    val data: ExerciceDTO
+)

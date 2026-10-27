@@ -73,4 +73,9 @@
     <string name="rechercher">Rechercher</string>
     <string name="fermer">Fermer</string>
     <string name="aucun_resultat_exercice">Aucun exercice en français trouvé</string>
+    <string name="exercice_series_repetitions">%1$d séries × %2$d répétitions</string>
+    <string name="exercice_charge">Charge : %1$s kg</string>
+    <string name="exercice_equipement">Équipement : %1$s</string>
+    <string name="reessayer">Réessayer</string>
+    <string name="chargement_consignes_cd">Chargement des consignes</string>
 </resources>

@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
+import com.example.tp1.data.TypeActivite
+import com.example.tp1.ui.components.ExercicesDetailSection
+import com.example.tp1.viewmodel.ConsignesUiState
 import com.example.tp1.repository.FakeListEntrainement
 import com.example.tp1.ui.theme.TrainingApp
 import com.example.tp1.ui.components.ConfirmationSuppressionDialog
@@ -58,6 +61,7 @@ fun EntrainementDetailScreen(
         onBack = onBack,
         onModifierClick = onModifierClick,
         onCompleteChange = { viewModel.basculerComplete(id) },
+        onReessayerConsignes = viewModel::reessayerConsignes,
         onSupprimerClick = viewModel::afficherDialogueSuppression,
         onAnnulerSuppression = viewModel::masquerDialogueSuppression,
         onConfirmerSuppression = {
@@ -76,6 +80,7 @@ fun EntrainementDetailContent(
     onSupprimerClick: () -> Unit,
     onAnnulerSuppression: () -> Unit,
     onConfirmerSuppression: () -> Unit,
+    onReessayerConsignes: () -> Unit = {},
     onModifierClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -114,7 +119,7 @@ fun EntrainementDetailContent(
             uiState.entrainement == null -> CentreEcran(padding) {
                 Text(stringResource(R.string.entrainement_introuvable))
             }
-            else -> DetailCorps(uiState.entrainement, padding, onCompleteChange)
+            else -> DetailCorps(uiState.entrainement, uiState.consignes, padding, onCompleteChange, onReessayerConsignes)
         }
     }
 
@@ -140,8 +145,10 @@ private fun CentreEcran(padding: PaddingValues, content: @Composable () -> Unit)
 @Composable
 private fun DetailCorps(
     entrainement: Entrainement,
+    consignes: ConsignesUiState,
     padding: PaddingValues,
-    onCompleteChange: () -> Unit
+    onCompleteChange: () -> Unit,
+    onReessayerConsignes: () -> Unit
 ) {
     val typeLieu = stringResource(
         if (entrainement.exterieur) R.string.lieu_exterieur else R.string.lieu_interieur
@@ -175,6 +182,13 @@ private fun DetailCorps(
             label = stringResource(R.string.label_notes),
             valeur = entrainement.notes
         )
+        if (entrainement.activite == TypeActivite.MUSCULATION) {
+            ExercicesDetailSection(
+                exercices = entrainement.exercices,
+                consignes = consignes,
+                onReessayerClick = onReessayerConsignes
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
