@@ -110,7 +110,7 @@ class EntrainementsViewModel(
 
     // Les consignes ne sont rechargées que si la liste des exercices change (pas à chaque modification de la séance)
     private val idsExercicesFlow = entrainementDetailFlow
-        .map { entrainement -> entrainement?.exercices?.map { it.idExterne }?.distinct().orEmpty() }
+        .map { entrainement -> entrainement?.exercices?.map { it.idExterne }?.filter { it.isNotBlank() }?.distinct().orEmpty() }
         .distinctUntilChanged()
 
     init {
@@ -152,7 +152,14 @@ class EntrainementsViewModel(
         viewModelScope.launch { repository.supprimer(id) }
     }
 
-    fun chargerDetail(id: Int) { _idSelectionne.value = id }
+    fun chargerDetail(id: Int) {
+        if (_idSelectionne.value != id) {
+            // L'état de chargement et l'erreur de la séance précédente ne s'appliquent plus
+            _consignes.update { it.copy(isLoading = false, erreur = null) }
+        }
+        _idSelectionne.value = id
+    }
+
 
     fun reessayerConsignes() { _reessaiConsignes.update { it + 1 } }
 
