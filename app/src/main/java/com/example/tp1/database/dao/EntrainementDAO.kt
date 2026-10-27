@@ -1,12 +1,13 @@
-package com.example.tp1.database
+package com.example.tp1.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.tp1.data.Entrainement
+import androidx.room.Transaction
+import com.example.tp1.database.entity.EntrainementEntity
+import com.example.tp1.database.relation.EntrainementAvecExercices
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,8 +18,8 @@ interface EntrainementDAO {
     @Query("SELECT * FROM entrainements WHERE id = :id")
     suspend fun trouverParId(id: Int) : EntrainementEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insererEntrainement(entrainement: EntrainementEntity)
+    @Insert
+    suspend fun insererEntrainement(entrainement: EntrainementEntity): Long
 
     @Update
     suspend fun modifierEntrainement(entrainement: EntrainementEntity)
@@ -34,4 +35,12 @@ interface EntrainementDAO {
 
     @Query("SELECT * FROM entrainements ORDER BY titre ASC")
     suspend fun chargerTousLesEntrainements() : List<EntrainementEntity>
+
+    @Transaction
+    @Query("SELECT * FROM entrainements WHERE id = :id")
+    suspend fun getEntrainementAvecExercices(id: Int) : EntrainementAvecExercices?
+
+    @Transaction
+    @Query("SELECT * FROM entrainements WHERE id = :id")
+    fun observerEntrainementAvecExercices(id: Int) : Flow<EntrainementAvecExercices?>
 }

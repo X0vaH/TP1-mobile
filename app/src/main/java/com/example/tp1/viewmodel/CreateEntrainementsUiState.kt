@@ -1,6 +1,7 @@
 package com.example.tp1.viewmodel
 
 import com.example.tp1.data.TypeActivite
+import com.example.tp1.network.ExerciceDTO
 
 data class CreateEntrainementsUiState (
     val titre: String = "",
@@ -9,6 +10,8 @@ data class CreateEntrainementsUiState (
     val exterieur: Boolean = true,
     val intensite: Int = 0,
     val notes: String = "",
+    val exercices: List<ExerciceFormUiState> = emptyList(),
+    val recherche: RechercheExerciceUiState = RechercheExerciceUiState(),
     val erreurTitre: String? = null,
     val erreurActivite: String? = null,
     val erreurLieu: String? = null,
@@ -20,4 +23,27 @@ data class CreateEntrainementsUiState (
     val estModification: Boolean = false,
     val erreur: String? = null
 
+)
+
+// Champs numériques en String (saisie texte)
+data class ExerciceFormUiState(
+    val idExterne: String,
+    val nom: String,
+    val cible: String,
+    val equipement: String,
+    val series: String = "3",
+    val repetitions: String = "10",
+    val charge: String = "0",
+    val erreurSeries: String? = null,
+    val erreurRepetitions: String? = null,
+    val erreurCharge: String? = null
+)
+
+data class RechercheExerciceUiState(
+    val afficherDialogue: Boolean = false,
+    val query: String = "",
+    val isSearching: Boolean = false,
+    val rechercheEffectuee: Boolean = false,
+    val erreur: String? = null,
+    val resultats: List<ExerciceDTO> = emptyList()
 )

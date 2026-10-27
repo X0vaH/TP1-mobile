@@ -14,6 +14,10 @@ val localProperties = Properties().apply {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     namespace = "com.example.tp1"
     compileSdk {
