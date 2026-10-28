@@ -219,27 +219,27 @@ class CreateEntrainementsViewModel(
 
         if (state.titre.trim().length < 3) {
             _uiState.update {
-                it.copy(erreurTitre = R.string.error_title.toString())
+                it.copy(erreurTitre = R.string.error_title)
             }
             formulaireValide = false
         }
 
         if (state.lieu.isBlank()) {
             _uiState.update {
-                it.copy(erreurLieu = R.string.erreur_location.toString())
+                it.copy(erreurLieu = R.string.erreur_location)
             }
             formulaireValide = false
         }
 
         if (state.intensite !in 1..10) {
             _uiState.update {
-                it.copy(erreurIntensite = R.string.error_intensity.toString())
+                it.copy(erreurIntensite = R.string.error_intensity)
             }
             formulaireValide = false
         }
         if (state.activite == null) {
             _uiState.update {
-                it.copy(erreurActivite = R.string.error_activity_type.toString())
+                it.copy(erreurActivite = R.string.error_activity_type)
             }
             formulaireValide = false
         }

@@ -18,5 +18,4 @@ interface IEntrainementRepository {
 
     suspend fun rechercherExercicesDepuisApi(motCle: String, apiKey: String): Result<List<ExerciceDTO>>
     suspend fun obtenirConsignesExercice(idExterne: String, apiKey: String): Result<ExerciceDTO>
-    suspend fun importerExercice(exercice: ExerciceDTO): Result<Unit>
 }

@@ -72,14 +72,11 @@ class FakeEntrainementRepository : IEntrainementRepository {
         motCle: String,
         apiKey: String
     ): Result<List<ExerciceDTO>> {
-        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour importer depuis MoveBase."))
-    }
-    override suspend fun obtenirConsignesExercice(idExterne: String, apiKey: String): Result<ExerciceDTO> {
-        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour charger les consignes."))
+        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour rechercher des exercices."))
     }
 
-    override suspend fun importerExercice(exercice: ExerciceDTO): Result<Unit> {
-        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour importer depuis MoveBase."))
+    override suspend fun obtenirConsignesExercice(idExterne: String, apiKey: String): Result<ExerciceDTO> {
+        return Result.failure(UnsupportedOperationException("Utilisez le dépôt Room pour charger les consignes."))
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.tp1.viewmodel
 
+import androidx.annotation.StringRes
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.network.ExerciceDTO
 
@@ -12,11 +13,11 @@ data class CreateEntrainementsUiState (
     val notes: String = "",
     val exercices: List<ExerciceFormUiState> = emptyList(),
     val recherche: RechercheExerciceUiState = RechercheExerciceUiState(),
-    val erreurTitre: String? = null,
-    val erreurActivite: String? = null,
-    val erreurLieu: String? = null,
+    @StringRes val erreurTitre: Int? = null,
+    @StringRes val erreurActivite: Int? = null,
+    @StringRes val erreurLieu: Int? = null,
     val erreurExterieur: String? = null,
-    val erreurIntensite: String? = null,
+    @StringRes val erreurIntensite: Int? = null,
     val erreurNotes: String? = null,
     val isSaving: Boolean = false,
     val isLoading: Boolean = false,
