@@ -120,7 +120,7 @@ class RoomEntrainementRepository(
                 limite = 100
             )
             check(reponse.success) { "La recherche MoveBase a échoué." }
-            reponse.data
+            reponse.data.filter { it.lang.equals("fr", ignoreCase = true) }
         }
     }
 
@@ -183,8 +183,19 @@ class RoomEntrainementRepository(
                     activite = TypeActivite.MUSCULATION,
                     lieu = "Gym",
                     exterieur = false,
-                    intensite = (1..10).random(),
-                    notes = notes
+                    intensite = 1,
+                    notes = notes,
+                    exercices = listOf(
+                        ExerciceSeance(
+                            idExterne = exercice.id,
+                            nom = exercice.name,
+                            cible = exercice.target,
+                            equipement = exercice.equipment,
+                            series = 3,
+                            repetitions = 10,
+                            charge = 0.0
+                        )
+                    )
                 )
             )
             Result.success(Unit)
