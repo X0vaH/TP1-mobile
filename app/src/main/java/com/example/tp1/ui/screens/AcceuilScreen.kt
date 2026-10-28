@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tp1.R
-import com.example.tp1.repository.FakeListEntrainement
+import com.example.tp1.ui.preview.entrainementsApercu
 import com.example.tp1.ui.theme.TrainingApp
 import com.example.tp1.ui.components.ProchaineSeanceCard
 import com.example.tp1.viewmodel.AccueilUiState
@@ -136,7 +136,7 @@ fun AccueilPreview() {
             uiState = AccueilUiState(
                 totalSeances = 3,
                 seancesCompletees = 1,
-                prochaineSeance = FakeListEntrainement.liste.first(),
+                prochaineSeance = entrainementsApercu.first(),
                 isLoading = false
             ),
             onSeanceClick = {},

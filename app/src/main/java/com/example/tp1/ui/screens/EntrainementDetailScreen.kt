@@ -38,7 +38,7 @@ import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.ui.components.ExercicesDetailSection
 import com.example.tp1.viewmodel.ConsignesUiState
-import com.example.tp1.repository.FakeListEntrainement
+import com.example.tp1.ui.preview.entrainementsApercu
 import com.example.tp1.ui.theme.TrainingApp
 import com.example.tp1.ui.components.ConfirmationSuppressionDialog
 import com.example.tp1.ui.components.DetailChamp
@@ -210,7 +210,7 @@ fun EntrainementDetailPreview() {
     TrainingApp {
         EntrainementDetailContent(
             uiState = EntrainementDetailUiState(
-                entrainement = FakeListEntrainement.liste.first(),
+                entrainement = entrainementsApercu.first(),
                 isLoading = false
             ),
             onBack = {},
@@ -228,7 +228,7 @@ fun EntrainementDetailDialoguePreview() {
     TrainingApp {
         EntrainementDetailContent(
             uiState = EntrainementDetailUiState(
-                entrainement = FakeListEntrainement.liste.first(),
+                entrainement = entrainementsApercu.first(),
                 isLoading = false,
                 afficherDialogueSuppression = true
             ),

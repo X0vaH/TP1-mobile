@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
-import com.example.tp1.repository.FakeListEntrainement
+import com.example.tp1.ui.preview.entrainementsApercu
 import com.example.tp1.ui.theme.TrainingApp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +49,7 @@ fun ProchaineSeanceCard(
 fun ProchaineSeanceCardPreview() {
     TrainingApp {
         ProchaineSeanceCard(
-            entrainement = FakeListEntrainement.liste.first(),
+            entrainement = entrainementsApercu.first(),
             onClick = {}
         )
     }

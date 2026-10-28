@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.update
 import com.example.tp1.data.TypeActivite
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
-import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +22,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EntrainementsViewModel(
-    private val repository: IEntrainementRepository = FakeEntrainementRepository()
+    private val repository: IEntrainementRepository
 ) : ViewModel() {
 
     // Local UI state (not persisted)

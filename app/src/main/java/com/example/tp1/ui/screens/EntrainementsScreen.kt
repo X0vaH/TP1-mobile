@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tp1.R
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.TypeActivite
-import com.example.tp1.repository.FakeListEntrainement
+import com.example.tp1.ui.preview.entrainementsApercu
 import com.example.tp1.ui.theme.TrainingApp
 import com.example.tp1.ui.components.EntrainementCard
 import com.example.tp1.viewmodel.EntrainementsUiState
@@ -211,7 +211,7 @@ fun EntrainementsListe(
 fun EntrainementListePreview() {
     TrainingApp {
         EntrainementContent(
-            uiState = EntrainementsUiState(entrainements = FakeListEntrainement.liste),
+            uiState = EntrainementsUiState(entrainements = entrainementsApercu),
             onDetailsClick = { },
             onFavoriClick = { },
             onRechercheChange = { },
