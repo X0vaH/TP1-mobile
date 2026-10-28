@@ -10,7 +10,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.tp1.EntrainementApplication
-import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import com.example.tp1.ui.screens.AccueilScreen
 import com.example.tp1.ui.screens.CreateEntrainementScreen

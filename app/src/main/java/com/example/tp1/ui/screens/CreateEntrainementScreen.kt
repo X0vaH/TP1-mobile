@@ -49,7 +49,6 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tp1.R
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.ui.theme.TrainingApp
@@ -63,7 +62,7 @@ fun CreateEntrainementScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onEntrainementCreated: () -> Unit,
-    viewModel: CreateEntrainementsViewModel = viewModel()
+    viewModel: CreateEntrainementsViewModel
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

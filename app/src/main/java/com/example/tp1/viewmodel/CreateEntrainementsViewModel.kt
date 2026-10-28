@@ -8,7 +8,6 @@ import com.example.tp1.data.Entrainement
 import com.example.tp1.data.ExerciceSeance
 import com.example.tp1.data.TypeActivite
 import com.example.tp1.network.ExerciceDTO
-import com.example.tp1.repository.FakeEntrainementRepository
 import com.example.tp1.repository.IEntrainementRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +17,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 
 class CreateEntrainementsViewModel(
-    private val repository: IEntrainementRepository = FakeEntrainementRepository(),
+    private val repository: IEntrainementRepository,
     private val entrainementId: Int? = null
 ) : ViewModel() {
 

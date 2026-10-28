@@ -33,7 +33,8 @@ abstract class EntrainementDatabase : RoomDatabase() {
                     context.applicationContext,
                     EntrainementDatabase::class.java,
                     "entrainements_database.db"
-                ).build().also { INSTANCE = it }
+                ).addCallback(DonneesInitiales)
+                    .build().also { INSTANCE = it }
             }
         }
     }
