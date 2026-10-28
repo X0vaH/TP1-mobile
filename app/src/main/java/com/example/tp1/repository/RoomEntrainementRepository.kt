@@ -3,6 +3,7 @@ package com.example.tp1.repository
 import retrofit2.HttpException
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.ExerciceSeance
+import com.example.tp1.data.TypeActivite
 import androidx.room.withTransaction
 import com.example.tp1.database.EntrainementDatabase
 import com.example.tp1.database.dao.EntrainementDAO
@@ -159,6 +160,36 @@ class RoomEntrainementRepository(
                 else -> "Erreur du serveur MoveBase : ${e.code()}."
             }
             Result.failure(Exception(message, e))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun importerExercice(exercice: ExerciceDTO): Result<Unit> {
+        return try {
+            val notes = buildString {
+                appendLine(exercice.instructions)
+                appendLine()
+                appendLine("Muscle ciblé : ${exercice.target}")
+                appendLine("Équipement : ${exercice.equipment}")
+                appendLine("Source MoveBase : ${exercice.id}")
+                append(exercice.attribution)
+            }
+
+            ajouter(
+                Entrainement(
+                    id = 0,
+                    titre = exercice.name,
+                    activite = TypeActivite.MUSCULATION,
+                    lieu = "Gym",
+                    exterieur = false,
+                    intensite = (1..10).random(),
+                    notes = notes
+                )
+            )
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Result.failure(e)
         }

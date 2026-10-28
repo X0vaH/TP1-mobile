@@ -2,9 +2,11 @@ package com.example.tp1.database
 
 import com.example.tp1.data.Entrainement
 import com.example.tp1.data.ExerciceSeance
+import com.example.tp1.data.TypeActivite
 import com.example.tp1.database.entity.EntrainementEntity
 import com.example.tp1.database.entity.ExerciceSeanceEntity
 import com.example.tp1.database.relation.EntrainementAvecExercices
+import com.example.tp1.network.ExerciceDTO
 
 fun EntrainementEntity.toModel() : Entrainement {
     return Entrainement(
@@ -31,6 +33,20 @@ fun Entrainement.toEntity() : EntrainementEntity {
         notes = this.notes,
         estComplete = this.estComplete,
         estFavori = this.estFavori
+    )
+}
+
+fun ExerciceDTO.toEntity(): EntrainementEntity {
+    return EntrainementEntity(
+        id = 0, // Auto-généré par Room
+        titre = this.name,
+        activite = TypeActivite.MUSCULATION,
+        lieu = "Gym",
+        exterieur = false,
+        intensite = 0,
+        notes = "",
+        estComplete = false,
+        estFavori = false
     )
 }
 
