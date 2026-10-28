@@ -251,7 +251,7 @@ fun CreateEntrainementContent(
             label = { Text(stringResource(R.string.titre_form_lbl)) },
             isError = uiState.erreurTitre != null,
             supportingText = {
-                uiState.erreurTitre?.let { Text(stringResource(R.string.error_title)) }
+                uiState.erreurTitre?.let { Text(stringResource(it)) }
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -269,7 +269,7 @@ fun CreateEntrainementContent(
                 label = { Text(stringResource(R.string.activite_form_lbl)) },
                 isError = uiState.erreurActivite != null,
                 supportingText = {
-                    uiState.erreurActivite?.let { Text(it) }
+                    uiState.erreurActivite?.let { Text(stringResource(it)) }
                 },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(dropDownExpanded) },
                 modifier = Modifier
@@ -299,7 +299,7 @@ fun CreateEntrainementContent(
             label = { Text(stringResource(R.string.lieu_form_lbl)) },
             isError = uiState.erreurLieu != null,
             supportingText = {
-                uiState.erreurLieu?.let { Text(it) }
+                uiState.erreurLieu?.let { Text(stringResource(it)) }
             },
             modifier = Modifier.fillMaxWidth()
         )
